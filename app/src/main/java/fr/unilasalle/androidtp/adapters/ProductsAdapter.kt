@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import fr.unilasalle.androidtp.R
 import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.databinding.ProductItemBinding
 
 class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
