@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">androidtp</string>
+    <string name="product_image">product_image</string>
+    <string name="nom_du_produit">Nom du produit</string>
+    <string name="prix_du_produit">Prix du produit</string>
 </resources>
