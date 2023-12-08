@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ProductNameStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <item name="android:textStyle">bold</item>
+        <!-- Autres attributs de style -->
+    </style>
+
+    <style name="ProductPriceStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/textColorPrimary</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <!-- Autres attributs de style -->
+    </style>
+
+
+</resources>
