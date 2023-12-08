@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "fr.unilasalle.androidtp"
-    compileSdk = 33
+    compileSdk = 34
 
     buildFeatures {
         viewBinding = true
@@ -54,8 +54,15 @@ dependencies {
     // Import de la librairie Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit-adapters:2.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
     // Import de Glide
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor  ("com.github.bumptech.glide:compiler:4.12.0")
+
+    //ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    //LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 }

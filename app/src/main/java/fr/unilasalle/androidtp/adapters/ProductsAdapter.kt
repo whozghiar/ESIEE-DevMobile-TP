@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.R
 import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.databinding.ProductItemBinding
 
 class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
@@ -23,7 +25,18 @@ class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adap
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         with(holder.binding) {
             val product = productList[position]
-            // Utilisez binding.imageView, binding.titleView, et binding.priceView
+
+
+            // Affectation des valeurs aux vues
+            binding.textProductName.text  = product.title
+            binding.textProductPrice.text = "${product.price}"
+
+            // Chargement de l'image
+            Glide.with(binding.imageProduct.context)
+                .load(product.image)
+                .into(binding.imageProduct)
+
+
         }
     }
 
