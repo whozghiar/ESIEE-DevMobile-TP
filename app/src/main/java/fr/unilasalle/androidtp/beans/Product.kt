@@ -1,6 +1,7 @@
 package fr.unilasalle.androidtp.beans
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
  * Bean représentant un produit
@@ -19,4 +20,4 @@ data class Product(
     val image: String,
 
 
-)
+) : Serializable

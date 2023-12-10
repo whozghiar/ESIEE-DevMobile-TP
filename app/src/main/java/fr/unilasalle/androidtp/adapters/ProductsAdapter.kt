@@ -1,9 +1,11 @@
 package fr.unilasalle.androidtp.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.unilasalle.androidtp.Activities.DetailProductActivity
 import fr.unilasalle.androidtp.beans.Product
 import fr.unilasalle.androidtp.databinding.ProductItemBinding
 
@@ -53,7 +55,6 @@ class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adap
         with(holder.binding) {
             val product = productList[position]
 
-
             // Affectation des valeurs aux vues
             binding.textProductName.text  = product.title
             binding.textProductPrice.text = "${product.price}"
@@ -62,6 +63,18 @@ class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adap
             Glide.with(binding.imageProduct.context)
                 .load(product.image)
                 .into(binding.imageProduct)
+        }
+
+        holder.itemView.setOnClickListener {
+
+            // Création de l'Intent
+            val intent = Intent(holder.itemView.context, DetailProductActivity::class.java)
+
+            // Ajout du produit dans l'Intent
+            intent.putExtra("product", productList[position])
+
+            // Démarrage de l'activité
+            holder.itemView.context.startActivity(intent)
         }
     }
 
