@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: ProductAdapter
     private val service = RetrofitAPI
-    private lateinit var categories: List<String> // This should be fetched from the API or defined somewhere
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +27,25 @@ class MainActivity : AppCompatActivity() {
         val productViewModel = ProductViewModel(service)
 
 
-        // Setup the recycler view
-        productViewModel.product.observe(this, {
+        // Mise en place du RecyclerView pour afficher les produits
+        productViewModel.product.observe(this) {
             adapter = ProductAdapter(it)
             binding.listeImage.adapter = adapter
             binding.listeImage.layoutManager = LinearLayoutManager(this)
-        })
+        }
+
+
+        // Mise en place du Spinner pour afficher les catégories
+        productViewModel.categories.observe(this) {
+            Log.d("MainActivity", "Categories: $it")
+
+            val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, it)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+            binding.categorySpinner.adapter = adapter
+        }
+
+
 
 
 
