@@ -1,5 +1,7 @@
 package fr.unilasalle.androidtp.Activities
 
+import android.R
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -7,14 +9,16 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.StyleSpan
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
-import fr.unilasalle.androidtp.API.RetrofitAPI
-import fr.unilasalle.androidtp.R
-import fr.unilasalle.androidtp.adapters.ProductAdapter
+import fr.unilasalle.androidtp.beans.CartItem
 import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityDetailProductBinding
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
+import fr.unilasalle.androidtp.viewmodels.ProductViewModel
 
 class DetailProductActivity : AppCompatActivity() {
 
@@ -30,6 +34,29 @@ class DetailProductActivity : AppCompatActivity() {
         binding = ActivityDetailProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Bouton retour
+        binding.buttonBack.setOnClickListener {
+            finish()
+        }
+
+        val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, (1..10).toList())
+        binding.spinnerQuantity.adapter = adapter
+
+
+        // Bouton ajouter au panier
+        binding.buttonAddToCart.setOnClickListener {
+            val productToAdd = intent.extras?.getSerializable("product", Product::class.java)
+
+            ShoppingCart.addItem(CartItem(productToAdd!!, binding.spinnerQuantity.selectedItem.toString().toInt()))
+            Toast.makeText(this, String.format("%d produit(s) ajouté(s) au panier",binding.spinnerQuantity.selectedItem.toString().toInt()), Toast.LENGTH_SHORT).show()
+        }
+
+        binding.shoppingCartIcon.setOnClickListener {
+            val intent = Intent(this, PanierActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Récupération des informations du produit transmises par l'activité précédente
         intent.extras?.let {
             product ->
             val product = product.getSerializable("product", Product::class.java)
@@ -67,4 +94,7 @@ class DetailProductActivity : AppCompatActivity() {
         }
 
     }
+
+
+
 }

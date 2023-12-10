@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Androidtp"
         tools:targetApi="31">
         <activity
+            android:name=".Activities.PanierActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.DetailProductActivity"
             android:exported="false" />
         <activity

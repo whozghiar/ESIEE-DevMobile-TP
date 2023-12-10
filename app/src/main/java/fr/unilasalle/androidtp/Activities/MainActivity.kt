@@ -2,6 +2,7 @@ package fr.unilasalle.androidtp.Activities
 
 import android.R
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -30,6 +31,9 @@ class MainActivity : AppCompatActivity() {
 
         // Mise en place du RecyclerView pour afficher tous les produits
         initRecyclerView(productViewModel, binding)
+
+        // Mise en place du panier
+        initCart (productViewModel, binding)
 
         // Mise en place du Spinner pour afficher les catégories de produits
         createSpinner(productViewModel, binding)
@@ -104,6 +108,13 @@ class MainActivity : AppCompatActivity() {
             val adapter = ProductAdapter(it)
             binding.listeImage.adapter = adapter
             binding.listeImage.layoutManager = LinearLayoutManager(this)
+        }
+    }
+
+    private fun initCart(productView: ProductViewModel, binding : ActivityMainBinding) {
+        binding.shoppingCartIcon.setOnClickListener {
+            val intent = Intent(this, PanierActivity::class.java)
+            startActivity(intent)
         }
     }
 

@@ -6,9 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".Activities.DetailProductActivity">
 
+    <!-- Logo du caddie -->
+
+    <ImageView
+        android:id="@+id/shoppingCartIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/shopping_cart"
+        android:src="@drawable/ic_shopping_cart"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.958"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.207"
+        tools:ignore="MissingConstraints" />
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="410dp"
         android:layout_height="630dp"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="101dp">
 
@@ -47,9 +66,33 @@
                 android:layout_width="381dp"
                 android:layout_height="154dp" />
 
-            <!-- Ajoutez d'autres TextView pour la description, le prix, etc. -->
+            <Spinner
+                android:id="@+id/spinnerQuantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp" />
+
+            <Button
+                android:id="@+id/buttonAddToCart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonAddToCart"
+                tools:ignore="VisualLintButtonSize" />
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/buttonBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonBack"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.301"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
