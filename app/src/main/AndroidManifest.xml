@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-<!-- Les permissions concernant l'accès à internet et à l'état du réseau -->
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Les permissions concernant l'accès à internet et à l'état du réseau -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +16,13 @@
         android:theme="@style/Theme.Androidtp"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activities.PanierActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.DetailProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

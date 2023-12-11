@@ -3,4 +3,8 @@
     <string name="product_image">product_image</string>
     <string name="nom_du_produit">Nom du produit</string>
     <string name="prix_du_produit">Prix du produit</string>
+    <string name="buttonBack">Retour</string>
+    <string name="buttonAddToCart">Ajouter au panier</string>
+    <string name="shopping_cart">ShoppingCartButton</string>
+    <string name="remove">retirer le produit</string>
 </resources>
