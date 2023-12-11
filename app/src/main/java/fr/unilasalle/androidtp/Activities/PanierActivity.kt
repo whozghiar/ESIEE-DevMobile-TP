@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import fr.unilasalle.androidtp.adapters.CartAdapter
 import fr.unilasalle.androidtp.adapters.ProductAdapter
-import fr.unilasalle.androidtp.beans.Product
 import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityPanierBinding
 
@@ -24,12 +24,12 @@ class PanierActivity : AppCompatActivity() {
             finish()
         }
 
-        ProductAdapter(ShoppingCart.getProducts()).apply {
+        CartAdapter(ShoppingCart.getProducts()).apply {
             binding.cartProductsItems.adapter = this
             binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
         }
 
-
-
+        binding.totalitems.text = ShoppingCart.getCount().toString()
+        binding.totalPrice.text = ShoppingCart.getTotalPrice().toString()
     }
 }
