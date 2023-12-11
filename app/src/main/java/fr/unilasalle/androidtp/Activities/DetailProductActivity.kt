@@ -1,5 +1,6 @@
 package fr.unilasalle.androidtp.Activities
 
+import BannerFragment
 import android.R
 import android.content.Intent
 import android.graphics.Typeface
@@ -34,9 +35,11 @@ class DetailProductActivity : AppCompatActivity() {
         binding = ActivityDetailProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Bouton retour
-        binding.buttonBack.setOnClickListener {
-            finish()
+        // Bannière en haut de l'écran
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.bannerContainer.id, BannerFragment())
+                .commit()
         }
 
         val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, (1..10).toList())
@@ -51,10 +54,6 @@ class DetailProductActivity : AppCompatActivity() {
             Toast.makeText(this, String.format("%d produit(s) ajouté(s) au panier",binding.spinnerQuantity.selectedItem.toString().toInt()), Toast.LENGTH_SHORT).show()
         }
 
-        binding.shoppingCartIcon.setOnClickListener {
-            val intent = Intent(this, PanierActivity::class.java)
-            startActivity(intent)
-        }
 
         // Récupération des informations du produit transmises par l'activité précédente
         intent.extras?.let {

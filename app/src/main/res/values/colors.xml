@@ -6,4 +6,11 @@
     <color name="textColorPrimary">#900C3F</color>
     <color name="productBackgroundColor">#FFB4A4</color>
 
+    <!-- Couleurs du thème -->
+    <color name="itemsOrange">#FF5400</color>
+    <color name="itemsBlanc">#FFFFFF</color>
+    <color name="background">#0A0A0A</color>
+
+
+
 </resources>

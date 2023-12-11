@@ -1,5 +1,6 @@
 package fr.unilasalle.androidtp.Activities
 
+import BannerFragment
 import android.R
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -32,8 +33,14 @@ class MainActivity : AppCompatActivity() {
         // Mise en place du RecyclerView pour afficher tous les produits
         initRecyclerView(productViewModel, binding)
 
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.bannerContainer.id, BannerFragment())
+                .commit()
+        }
+
         // Mise en place du panier
-        initCart (productViewModel, binding)
+        //initCart (productViewModel, binding)
 
         // Mise en place du Spinner pour afficher les catégories de produits
         createSpinner(productViewModel, binding)
@@ -111,11 +118,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /*
     private fun initCart(productView: ProductViewModel, binding : ActivityMainBinding) {
         binding.shoppingCartIcon.setOnClickListener {
             val intent = Intent(this, PanierActivity::class.java)
             startActivity(intent)
         }
     }
+
+     */
 
 }
