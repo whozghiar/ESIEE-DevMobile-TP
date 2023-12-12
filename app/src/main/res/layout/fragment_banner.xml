@@ -13,6 +13,7 @@
         android:id="@+id/logoImageView"
         android:layout_width="80dp"
         android:layout_height="match_parent"
+        android:layout_marginRight="5dp"
         app:srcCompat="@drawable/logo"
         tools:srcCompat="@drawable/logo" />
 
@@ -20,6 +21,7 @@
         android:id="@+id/searchEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:layout_weight="1"
         android:hint="Search games"
         android:tint="@color/itemsBlanc"/>
