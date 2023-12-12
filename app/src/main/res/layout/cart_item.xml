@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp" >
+    android:layout_height="match_parent">
 
   <LinearLayout
       android:layout_width="match_parent"
@@ -21,27 +18,28 @@
         android:id="@+id/idProductTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
-
-  </LinearLayout>
-
-  <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_weight="1"
-      android:orientation="horizontal">
+        android:layout_weight="1"
+        android:text="@string/nom_du_produit" />
 
     <TextView
-        android:id="@+id/idQuantity"
+        android:id="@+id/idQuantityProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/idPrice"
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
-  </LinearLayout>
+        android:layout_weight="1"
+        android:text="@string/prix_du_produit" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Button" />
+
+  </LinearLayout>
+</RelativeLayout>

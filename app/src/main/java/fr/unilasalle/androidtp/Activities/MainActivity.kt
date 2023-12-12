@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
@@ -33,14 +34,12 @@ class MainActivity : AppCompatActivity() {
         // Mise en place du RecyclerView pour afficher tous les produits
         initRecyclerView(productViewModel, binding)
 
+        // Bannière en haut de l'écran
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(binding.bannerContainer.id, BannerFragment())
                 .commit()
         }
-
-        // Mise en place du panier
-        //initCart (productViewModel, binding)
 
         // Mise en place du Spinner pour afficher les catégories de produits
         createSpinner(productViewModel, binding)
@@ -88,7 +87,7 @@ class MainActivity : AppCompatActivity() {
                             val adapter = ProductAdapter(it)
                             binding.listeImage.adapter = adapter
                             binding.listeImage.layoutManager =
-                                LinearLayoutManager(this@MainActivity)
+                                GridLayoutManager(this@MainActivity,2)
                         }
                     }
 
@@ -114,18 +113,9 @@ class MainActivity : AppCompatActivity() {
         productView.product.observe(this) {
             val adapter = ProductAdapter(it)
             binding.listeImage.adapter = adapter
-            binding.listeImage.layoutManager = LinearLayoutManager(this)
+            binding.listeImage.layoutManager = GridLayoutManager(this,2)
         }
     }
 
-    /*
-    private fun initCart(productView: ProductViewModel, binding : ActivityMainBinding) {
-        binding.shoppingCartIcon.setOnClickListener {
-            val intent = Intent(this, PanierActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-     */
 
 }

@@ -41,8 +41,8 @@ class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<C
         with(holder.binding) {
 
             binding.idProductTitle.text = cartItem.title
-            binding.idQuantity.text = "${ShoppingCart.getQuantity(cartItem)}"
-            binding.idPrice.text = "${ShoppingCart.getQuantity(cartItem) * cartItem.price}"
+            binding.idQuantityProduct.text = "${ShoppingCart.getQuantity(cartItem)}"
+            //binding.text = "${ShoppingCart.getQuantity(cartItem) * cartItem.price}"
 
             Glide.with(binding.root)
                 .load(cartItem.image)

@@ -1,5 +1,6 @@
 package fr.unilasalle.androidtp.Activities
 
+import BannerFragment
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,9 +20,10 @@ class PanierActivity : AppCompatActivity() {
         binding = ActivityPanierBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Bouton retour
-        binding.button.setOnClickListener(){
-            finish()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(binding.bannerContainer.id, BannerFragment())
+                .commit()
         }
 
         CartAdapter(ShoppingCart.getProducts()).apply {
@@ -29,7 +31,7 @@ class PanierActivity : AppCompatActivity() {
             binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
         }
 
-        binding.totalitems.text = ShoppingCart.getCount().toString()
-        binding.totalPrice.text = ShoppingCart.getTotalPrice().toString()
+        binding.idQuantityProducts.text = ShoppingCart.getCount().toString()
+        binding.tvTotalAmount.text = ShoppingCart.getTotalPrice().toString()
     }
 }
