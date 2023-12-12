@@ -32,25 +32,24 @@
       android:id="@+id/idPriceProduct"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:layout_constraintBottom_toBottomOf="@id/button2"
-      app:layout_constraintEnd_toStartOf="@id/button2"
-      app:layout_constraintTop_toTopOf="@id/button2"
+      app:layout_constraintBottom_toBottomOf="@id/idSupprimer"
+      app:layout_constraintEnd_toStartOf="@id/idSupprimer"
+      app:layout_constraintTop_toTopOf="@id/idSupprimer"
       android:layout_marginEnd="15dp"/>
 
   <Button
-      android:id="@+id/button2"
+      android:id="@+id/idSupprimer"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Button"
+      android:text="Supprimer"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-    />
+      app:layout_constraintTop_toTopOf="parent" />
 
   <TextView
       android:id="@+id/idQuantityProduct"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/button2"
+      app:layout_constraintTop_toBottomOf="@id/idSupprimer"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintBottom_toBottomOf="parent"
       />

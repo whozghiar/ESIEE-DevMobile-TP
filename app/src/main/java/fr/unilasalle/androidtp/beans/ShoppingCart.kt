@@ -1,5 +1,7 @@
 package fr.unilasalle.androidtp.beans
 
+import android.util.Log
+
 object ShoppingCart {
 
     val cartItems = mutableListOf<CartItem>()
@@ -23,7 +25,20 @@ object ShoppingCart {
      * Supprime un produit du panier
      */
     fun removeItem(cartItem: CartItem) {
-        cartItems.remove(cartItem)
+        Log.d("ShoppingCart", "removeItem: ${cartItem.product.title}")
+        val existingItem =
+            cartItems.find { it.product.id == cartItem.product.id } // On cherche si le produit est déjà dans le panier
+
+        if (existingItem != null) { // Si le produit est déjà dans le panier on décrémente la quantité
+            Log.d("ShoppingCart", "Le produit est déjà dans le panier")
+            existingItem.quantity = existingItem.quantity-1
+            if (existingItem.quantity <= 0) { // Si la quantité est inférieure ou égale à 0 on supprime le produit du panier
+                Log.d("ShoppingCart", "La quantité est inférieure ou égale à 0")
+                cartItems.remove(existingItem)
+            }
+        } else {
+            Log.d("ShoppingCart", "Le produit n'est pas dans le panier")
+        }
     }
 
     /**
@@ -35,6 +50,18 @@ object ShoppingCart {
     fun getQuantity(product: Product): Int {
         val existingItem = cartItems.find { it.product.id == product.id }
         return existingItem?.quantity ?: 0
+    }
+
+    /**
+     * Retourne un produit du panier
+     * @param product
+     * @return CartItem
+     * @see Product
+     * @see CartItem
+     */
+    fun getCartItem(product: Product): CartItem
+    {
+        return cartItems.find { it.product.id == product.id }!!
     }
 
     /**

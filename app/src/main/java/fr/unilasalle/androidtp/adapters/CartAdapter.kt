@@ -1,16 +1,24 @@
 package fr.unilasalle.androidtp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.unilasalle.androidtp.Activities.OnItemClickListener
 import fr.unilasalle.androidtp.beans.Product
 import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.CartItemBinding
 
-class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     private lateinit var binding: CartItemBinding // Binding pour les cartItems (produits dans le panier)
+
+    var cartItems : List<Product> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     /**
      * ViewHolder pour les produits (éléments de la liste)
@@ -23,20 +31,32 @@ class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<C
          * @see Product
          * @see CartItemBinding
          */
-        fun bind(product:Product){
+        fun bind(product:Product, listener: OnItemClickListener){
 
             val productTitle = product.title
             val productQuantity = ShoppingCart.getQuantity(product)
             val productPrice = product.price
 
+            // Affectation des valeurs aux vues pour chaque produit
             binding.idProductTitle.text = "Produits : ${productTitle}"
             binding.idQuantityProduct.text = "Quantité : ${productQuantity}"
             binding.idPriceProduct.text= "Prix : ${productPrice * productQuantity}€"
 
+            // Chargement de l'image
             Glide.with(binding.root)
                 .load(product.image)
                 .into(binding.idMiniatureProduct)
+
+
+            // Bouton suppression d'un produit du panier
+            binding.idSupprimer.setOnClickListener {
+                Log.d("CartAdapter", "Suppression du produit ${product.title}")
+                listener.onDeleteProductDelete(product)
+            }
+
+
         }
+
     }
 
     /**
@@ -60,7 +80,7 @@ class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<C
      */
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val cart = cartItems[position]
-        holder.bind(cart)
+        holder.bind(cart,listener)
     }
 
     /**

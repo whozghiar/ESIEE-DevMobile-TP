@@ -7,13 +7,15 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.unilasalle.androidtp.adapters.CartAdapter
-import fr.unilasalle.androidtp.adapters.ProductAdapter
+import fr.unilasalle.androidtp.beans.Product
 import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityPanierBinding
 
 class PanierActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityPanierBinding
+    lateinit var cartAdapter: CartAdapter
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU) // Pour le .let de l'intent
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,10 +29,21 @@ class PanierActivity : AppCompatActivity() {
                 .commit()
         }
 
-        CartAdapter(ShoppingCart.getProducts()).apply {
-            binding.cartProductsItems.adapter = this
-            binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
+        val listener = object : OnItemClickListener {
+            override fun onDeleteProductDelete(product: Product) {
+                val item = ShoppingCart.getCartItem(product)
+                ShoppingCart.removeItem(item)
+                cartAdapter.cartItems = ShoppingCart.getProducts()
+            }
         }
+
+        cartAdapter = CartAdapter(listener)
+
+        binding.cartProductsItems.adapter = cartAdapter
+        binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
+
+        cartAdapter.cartItems =
+            ShoppingCart.getProducts() // Mise à jour des produits dans le panier
 
         // Mise à jour du total de produits et du prix total
         updateTotal(binding)
@@ -44,8 +57,14 @@ class PanierActivity : AppCompatActivity() {
      * @see ShoppingCart.getCount
      * @see ShoppingCart.getTotalPrice
      */
-    fun updateTotal(binding : ActivityPanierBinding) {
+    fun updateTotal(binding: ActivityPanierBinding) {
         binding.idQuantityProducts.text = ShoppingCart.getCount().toString()
         binding.tvTotalAmount.text = ShoppingCart.getTotalPrice().toString()
     }
+
+
+}
+
+interface OnItemClickListener {
+    fun onDeleteProductDelete(product: Product)
 }

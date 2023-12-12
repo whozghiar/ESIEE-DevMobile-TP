@@ -38,8 +38,9 @@ class BannerFragment : Fragment() {
         // S'il y a un objet dans le panier, on affiche le badge
         if (ShoppingCart.cartItems.isNotEmpty()) {
             binding.cartNotificationImageView.visibility = View.VISIBLE
+        } else {
+            binding.cartNotificationImageView.visibility = View.INVISIBLE
         }
-        binding.cartNotificationImageView.visibility = View.GONE
     }
 
     // Méthode qui met à jour le badge du panier dès que
