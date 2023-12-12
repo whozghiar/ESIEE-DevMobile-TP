@@ -40,8 +40,9 @@ class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<C
         val cartItem = cartItems[position]
         with(holder.binding) {
 
-            binding.idProductTitle.text = cartItem.title
-            binding.idQuantityProduct.text = "${ShoppingCart.getQuantity(cartItem)}"
+            binding.idProductTitle.text = "Produits : " + cartItem.title
+            binding.idQuantityProduct.text = "Quantité : ${ShoppingCart.getQuantity(cartItem)}"
+
             //binding.text = "${ShoppingCart.getQuantity(cartItem) * cartItem.price}"
 
             Glide.with(binding.root)
