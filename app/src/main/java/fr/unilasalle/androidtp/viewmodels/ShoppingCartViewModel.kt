@@ -27,7 +27,7 @@ class ShoppingCartViewModel(private val shoppingCartRepository: ShoppingCartRepo
     private fun loadCartItems() {
         viewModelScope.launch {
             try {
-                val items = shoppingCartRepository.getCartItems()
+                val items = shoppingCartRepository.getAllCartItems()
                 _cartItems.value = items
                 calculateTotalPrice(items)
                 calculateCountTotal(items)

@@ -4,6 +4,7 @@ import android.util.Log
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
 
+/*
 object ShoppingCart {
 
     val cartItems = mutableListOf<CartItem>()
@@ -87,4 +88,6 @@ object ShoppingCart {
     }
 
 
+
 }
+ */
