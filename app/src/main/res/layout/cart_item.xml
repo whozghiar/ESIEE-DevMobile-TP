@@ -1,56 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="10dp">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignParentStart="true"
-      android:layout_alignParentEnd="true"
-      android:layout_alignParentTop="true"
-      android:orientation="horizontal">
+      android:padding="8dp">
 
-  <ImageView
-      android:id="@+id/idMiniatureProduct"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
-    />
+    <ImageView
+        android:id="@+id/idMiniatureProduct"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/imagedescription"/>
 
-  <TextView
-      android:id="@+id/idProductTitle"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      app:layout_constraintEnd_toStartOf="@id/idPriceProduct"
-      app:layout_constraintStart_toEndOf="@+id/idMiniatureProduct"
-      app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/idProductTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/idMiniatureProduct"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="8dp" />
 
 
-  <TextView
-      android:id="@+id/idPriceProduct"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:layout_constraintBottom_toBottomOf="@id/idSupprimer"
-      app:layout_constraintEnd_toStartOf="@id/idSupprimer"
-      app:layout_constraintTop_toTopOf="@id/idSupprimer"
-      android:layout_marginEnd="15dp"/>
 
-  <Button
-      android:id="@+id/idSupprimer"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="Supprimer"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/idPriceProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/idMiniatureProduct"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/idQuantityProduct"
+        app:layout_constraintTop_toBottomOf="@id/idProductTitle"
+        android:layout_marginStart="8dp" />
 
-  <TextView
-      android:id="@+id/idQuantityProduct"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      app:layout_constraintTop_toBottomOf="@id/idSupprimer"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
-      />
+    <TextView
+        android:id="@+id/idQuantityProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/idSupprimer"
+        app:layout_constraintStart_toEndOf="@id/idPriceProduct"
+        app:layout_constraintTop_toBottomOf="@id/idProductTitle"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/idSupprimer"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:text="@string/supp"
+        app:layout_constraintStart_toEndOf="@id/idQuantityProduct"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/idProductTitle"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
