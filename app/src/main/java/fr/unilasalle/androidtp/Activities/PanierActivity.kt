@@ -32,6 +32,19 @@ class PanierActivity : AppCompatActivity() {
             binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
         }
 
+        // Mise à jour du total de produits et du prix total
+        updateTotal(binding)
+
+    }
+
+
+    // Fonction mettre à jour le total de produits et le prix total
+    /**
+     * Met à jour le total de produits et le prix total
+     * @see ShoppingCart.getCount
+     * @see ShoppingCart.getTotalPrice
+     */
+    fun updateTotal(binding : ActivityPanierBinding) {
         binding.idQuantityProducts.text = ShoppingCart.getCount().toString()
         binding.tvTotalAmount.text = ShoppingCart.getTotalPrice().toString()
     }

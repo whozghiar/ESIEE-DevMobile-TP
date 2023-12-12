@@ -15,7 +15,29 @@ class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<C
     /**
      * ViewHolder pour les produits (éléments de la liste)
      */
-    class CartViewHolder(val binding: CartItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class CartViewHolder(val binding: CartItemBinding) : RecyclerView.ViewHolder(binding.root){
+
+        /**
+         * Affectation des valeurs aux vues
+         * @param product
+         * @see Product
+         * @see CartItemBinding
+         */
+        fun bind(product:Product){
+
+            val productTitle = product.title
+            val productQuantity = ShoppingCart.getQuantity(product)
+            val productPrice = product.price
+
+            binding.idProductTitle.text = "Produits : ${productTitle}"
+            binding.idQuantityProduct.text = "Quantité : ${productQuantity}"
+            binding.idPriceProduct.text= "Prix : ${productPrice * productQuantity}€"
+
+            Glide.with(binding.root)
+                .load(product.image)
+                .into(binding.idMiniatureProduct)
+        }
+    }
 
     /**
      * Création de la vue
@@ -37,18 +59,8 @@ class CartAdapter(private val cartItems: List<Product>) : RecyclerView.Adapter<C
      * @see CartItemBinding
      */
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val cartItem = cartItems[position]
-        with(holder.binding) {
-
-            binding.idProductTitle.text = "Produits : " + cartItem.title
-            binding.idQuantityProduct.text = "Quantité : ${ShoppingCart.getQuantity(cartItem)}"
-
-            //binding.text = "${ShoppingCart.getQuantity(cartItem) * cartItem.price}"
-
-            Glide.with(binding.root)
-                .load(cartItem.image)
-                .into(binding.idMiniatureProduct).toString()
-        }
+        val cart = cartItems[position]
+        holder.bind(cart)
     }
 
     /**

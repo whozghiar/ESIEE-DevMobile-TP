@@ -19,26 +19,23 @@
       app:layout_constraintBottom_toBottomOf="parent"
     />
 
-    <TextView
-        android:id="@+id/idProductTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/nom_du_produit"
-        app:layout_constraintStart_toEndOf="@+id/idMiniatureProduct"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/textView2"
-        />
+  <TextView
+      android:id="@+id/idProductTitle"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toStartOf="@id/idPriceProduct"
+      app:layout_constraintStart_toEndOf="@+id/idMiniatureProduct"
+      app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/prix_du_produit"
-        app:layout_constraintEnd_toStartOf="@id/button2"
-        app:layout_constraintTop_toTopOf="@id/button2"
-        app:layout_constraintBottom_toBottomOf="@id/button2"
-        />
+  <TextView
+      android:id="@+id/idPriceProduct"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="@id/button2"
+      app:layout_constraintEnd_toStartOf="@id/button2"
+      app:layout_constraintTop_toTopOf="@id/button2"
+      android:layout_marginEnd="15dp"/>
 
   <Button
       android:id="@+id/button2"
