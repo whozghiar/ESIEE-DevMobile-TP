@@ -81,7 +81,7 @@ object ShoppingCart {
     fun getTotalPrice(): Double {
         var price = 0.0
         cartItems.map { price += it.quantity * it.product.price }
-        return price
+        return "%2f".format(price).toDouble()
     }
 
 
