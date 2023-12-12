@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
-import fr.unilasalle.androidtp.API.RetrofitAPI
+import fr.unilasalle.androidtp.network.RetrofitAPI
 import fr.unilasalle.androidtp.viewmodels.ProductViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -80,15 +80,8 @@ class MainActivity : AppCompatActivity() {
                     ) {
                         Log.d("MainActivity", "Catégorie sélectionnée : ${it[position]}")
 
-                        if (position == 0) productView.fetchData() // Si on sélectionne "Tout", on affiche tous les produits
-                        else // Sinon, on affiche les produits de la catégorie sélectionnée
-                        productView.fetchProductsByCategory(it[position])
-                        productView.productsByCategory.observe(this@MainActivity) {
-                            productAdapter = ProductAdapter()
-                            binding.listeImage.adapter = productAdapter
-                            binding.listeImage.layoutManager =
-                                GridLayoutManager(this@MainActivity,2)
-                        }
+                        if (position == 0) initRecyclerView(productView, binding)
+                        else initRecyclerView(productView, binding, true, it[position])
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -109,14 +102,16 @@ class MainActivity : AppCompatActivity() {
      * @see ProductViewModel.product
      * @see ProductViewModel.fetchData
      */
-    private fun initRecyclerView(productView: ProductViewModel, binding : ActivityMainBinding) {
-        productView.fetchData()
+    private fun initRecyclerView(productView: ProductViewModel, binding : ActivityMainBinding, isFiltered : Boolean = false, categoryName : String = "Tout") {
+        if (!isFiltered) productView.fetchData()
+        else productView.fetchProductsByCategory(categoryName)
+
         productAdapter = ProductAdapter()
 
         binding.listeImage.adapter = productAdapter
-        binding.listeImage.layoutManager = GridLayoutManager(this,2)
+        binding.listeImage.layoutManager = GridLayoutManager(this@MainActivity,2)
 
-        productView.product.observe(this) {
+        productView.product.observe(this@MainActivity) {
             productAdapter.productList = it
         }
     }

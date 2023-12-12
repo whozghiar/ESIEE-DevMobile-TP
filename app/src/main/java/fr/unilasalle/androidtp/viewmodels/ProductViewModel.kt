@@ -1,13 +1,11 @@
 package fr.unilasalle.androidtp.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.unilasalle.androidtp.beans.Product
-import fr.unilasalle.androidtp.services.RetrofitService
-import kotlinx.coroutines.Dispatchers
+import fr.unilasalle.androidtp.model.Product
+import fr.unilasalle.androidtp.network.RetrofitService
 import kotlinx.coroutines.launch
 
 
@@ -60,6 +58,8 @@ class ProductViewModel (private val retrofitService : RetrofitService) : ViewMod
             _categories.value = retrofitService.getCategories()
         }
     }
+
+
 
 
 

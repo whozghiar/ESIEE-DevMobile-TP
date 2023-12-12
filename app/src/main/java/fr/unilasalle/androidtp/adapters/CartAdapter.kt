@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.Activities.OnItemClickListener
-import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.CartItemBinding
 
@@ -31,7 +31,7 @@ class CartAdapter(private val listener: OnItemClickListener) : RecyclerView.Adap
          * @see Product
          * @see CartItemBinding
          */
-        fun bind(product:Product, listener: OnItemClickListener){
+        fun bind(product: Product, listener: OnItemClickListener){
 
             val productTitle = product.title
             val productQuantity = ShoppingCart.getQuantity(product)

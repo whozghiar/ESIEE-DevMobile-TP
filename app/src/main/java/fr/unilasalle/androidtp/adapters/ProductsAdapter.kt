@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.Activities.DetailProductActivity
-import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.databinding.ProductItemBinding
 
 /**
@@ -21,7 +21,8 @@ import fr.unilasalle.androidtp.databinding.ProductItemBinding
  *    @see onBindViewHolder
  *    @see getItemCount
  */
-class ProductAdapter() : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+/*
+class ProductsAdapter() : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     private lateinit var binding: ProductItemBinding // Binding pour les produits
 
@@ -40,7 +41,7 @@ class ProductAdapter() : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(
      *   @see ProductViewHolder
      */
     class ProductViewHolder(val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(product:Product){
+        fun bind(product: Product){
             // Affectation des valeurs aux vues
             binding.textProductName.text  = product.title
             binding.textProductPrice.text = "${product.price}"
@@ -91,3 +92,4 @@ class ProductAdapter() : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(
      */
     override fun getItemCount() = productList.size
 }
+*/

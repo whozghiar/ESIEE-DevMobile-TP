@@ -7,7 +7,7 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.unilasalle.androidtp.adapters.CartAdapter
-import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityPanierBinding
 

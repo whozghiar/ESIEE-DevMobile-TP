@@ -1,7 +1,7 @@
-package fr.unilasalle.androidtp.services
+package fr.unilasalle.androidtp.network
 
 import retrofit2.http.GET
-import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.model.Product
 import retrofit2.http.Path
 
 interface RetrofitService {
@@ -14,7 +14,7 @@ interface RetrofitService {
     suspend fun getProducts(): List<Product>
 
 
-    @GET("products/category/{categoryName}")
+    @GET("products/Category/{categoryName}")
     /**
      * Endpoint pour récupérer les produits d'une catégorie
      * @param categoryName
@@ -22,6 +22,16 @@ interface RetrofitService {
      *     Liste des produits de la catégorie
      */
     suspend fun getProductsByCategory(@Path("categoryName") categoryName: String): List<Product>
+
+    @GET("products/{productId}")
+    /**
+     * Endpoint pour récupérer un produit par son ID
+     * @param productId
+     * @return Product
+     *     Produit
+     */
+    suspend fun getProductById(@Path("productId") productId: Int): Product
+
 
     @GET("products/categories")
     /**

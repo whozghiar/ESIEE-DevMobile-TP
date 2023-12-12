@@ -2,7 +2,6 @@ package fr.unilasalle.androidtp.Activities
 
 import BannerFragment
 import android.R
-import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -14,12 +13,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
-import fr.unilasalle.androidtp.beans.CartItem
-import fr.unilasalle.androidtp.beans.Product
+import fr.unilasalle.androidtp.model.CartItem
+import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityDetailProductBinding
-import fr.unilasalle.androidtp.databinding.ActivityMainBinding
-import fr.unilasalle.androidtp.viewmodels.ProductViewModel
 
 class DetailProductActivity : AppCompatActivity() {
 

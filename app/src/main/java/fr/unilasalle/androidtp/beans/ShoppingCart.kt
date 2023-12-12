@@ -1,6 +1,8 @@
 package fr.unilasalle.androidtp.beans
 
 import android.util.Log
+import fr.unilasalle.androidtp.model.CartItem
+import fr.unilasalle.androidtp.model.Product
 
 object ShoppingCart {
 
