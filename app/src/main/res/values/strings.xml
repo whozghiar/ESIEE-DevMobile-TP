@@ -7,4 +7,5 @@
     <string name="buttonAddToCart">Ajouter au panier</string>
     <string name="shopping_cart">ShoppingCartButton</string>
     <string name="remove">retirer le produit</string>
+    <string name="imagedescription">imageDescription</string>
 </resources>
