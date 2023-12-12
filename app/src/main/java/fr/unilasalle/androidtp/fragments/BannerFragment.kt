@@ -46,17 +46,13 @@ class BannerFragment : Fragment() {
     // Méthode qui met à jour le badge du panier dès que
 
     private fun navigateToPanierActivity() {
+        // TODO Verif si la page est déjà ouverte ou desactiver bouton
         // Intent pour démarrer PanierActivity
         val intent = Intent(activity, PanierActivity::class.java)
         startActivity(intent)
     }
 
     private fun navigateToMainActivity() {
-        // Intent pour démarrer MainActivity
-        val intent = Intent(activity, MainActivity::class.java)
-        startActivity(intent)
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
+        activity?.finish() // On ferme l'activité actuelle
     }
 }

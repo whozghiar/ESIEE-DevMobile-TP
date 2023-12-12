@@ -21,9 +21,15 @@ import fr.unilasalle.androidtp.databinding.ProductItemBinding
  *    @see onBindViewHolder
  *    @see getItemCount
  */
-class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter() : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     private lateinit var binding: ProductItemBinding // Binding pour les produits
+
+    var productList : List<Product> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     /**
      * ViewHolder pour les produits (éléments de la liste)
