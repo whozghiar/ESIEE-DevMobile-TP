@@ -1,5 +1,6 @@
 package fr.unilasalle.androidtp.beans
 
+
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -11,6 +12,7 @@ import java.io.Serializable
  * @property category
  * @property image
  */
+
 data class Product(
 
     val id: Int,

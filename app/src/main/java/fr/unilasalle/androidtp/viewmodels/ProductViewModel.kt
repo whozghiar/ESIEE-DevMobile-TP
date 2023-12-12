@@ -10,6 +10,7 @@ import fr.unilasalle.androidtp.services.RetrofitService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
 class ProductViewModel (private val retrofitService : RetrofitService) : ViewModel(){
 
     // LiveData pour les produits
@@ -38,7 +39,6 @@ class ProductViewModel (private val retrofitService : RetrofitService) : ViewMod
     fun fetchData() {
         viewModelScope.launch(){
             _product.value = retrofitService.getProducts()
-
         }
     }
 
@@ -48,7 +48,7 @@ class ProductViewModel (private val retrofitService : RetrofitService) : ViewMod
      */
     fun fetchProductsByCategory(categoryName: String) {
         viewModelScope.launch {
-            _productsByCategory.value = retrofitService.getProductsByCategory(categoryName)
+            _product.value = retrofitService.getProductsByCategory(categoryName)
         }
     }
 

@@ -3,7 +3,6 @@ package fr.unilasalle.androidtp.Activities
 import BannerFragment
 import android.R
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
 import fr.unilasalle.androidtp.API.RetrofitAPI
@@ -20,7 +18,7 @@ import fr.unilasalle.androidtp.viewmodels.ProductViewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: ProductAdapter
+    private lateinit var productAdapter: ProductAdapter
     private val service = RetrofitAPI
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
         // Mise en place du Spinner pour afficher les catégories de produits
         createSpinner(productViewModel, binding)
+
+
 
     }
 
@@ -84,8 +84,8 @@ class MainActivity : AppCompatActivity() {
                         else // Sinon, on affiche les produits de la catégorie sélectionnée
                         productView.fetchProductsByCategory(it[position])
                         productView.productsByCategory.observe(this@MainActivity) {
-                            val adapter = ProductAdapter(it)
-                            binding.listeImage.adapter = adapter
+                            productAdapter = ProductAdapter()
+                            binding.listeImage.adapter = productAdapter
                             binding.listeImage.layoutManager =
                                 GridLayoutManager(this@MainActivity,2)
                         }
@@ -111,10 +111,13 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initRecyclerView(productView: ProductViewModel, binding : ActivityMainBinding) {
         productView.fetchData()
+        productAdapter = ProductAdapter()
+
+        binding.listeImage.adapter = productAdapter
+        binding.listeImage.layoutManager = GridLayoutManager(this,2)
+
         productView.product.observe(this) {
-            val adapter = ProductAdapter(it)
-            binding.listeImage.adapter = adapter
-            binding.listeImage.layoutManager = GridLayoutManager(this,2)
+            productAdapter.productList = it
         }
     }
 
