@@ -38,6 +38,7 @@ class ProductViewModel (private val retrofitService : RetrofitService) : ViewMod
     fun fetchData() {
         viewModelScope.launch(){
             _product.value = retrofitService.getProducts()
+
         }
     }
 

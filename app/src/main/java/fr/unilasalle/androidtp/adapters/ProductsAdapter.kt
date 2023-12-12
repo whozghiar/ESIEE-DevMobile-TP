@@ -33,7 +33,31 @@ class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adap
      *   @see RecyclerView.ViewHolder
      *   @see ProductViewHolder
      */
-    class ProductViewHolder(val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class ProductViewHolder(val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root){
+        fun bind(product:Product){
+            // Affectation des valeurs aux vues
+            binding.textProductName.text  = product.title
+            binding.textProductPrice.text = "${product.price}"
+
+            // Chargement de l'image
+            Glide.with(binding.imageProduct.context)
+                .load(product.image)
+                .into(binding.imageProduct)
+
+
+            binding.imageProduct.setOnClickListener {
+
+                // Création de l'Intent
+                val intent = Intent(binding.root.context, DetailProductActivity::class.java)
+
+                // Ajout du produit dans l'Intent
+                intent.putExtra("product", product)
+
+                // Démarrage de l'activité
+                binding.root.context.startActivity(intent)
+            }
+        }
+    }
 
     /**
      * Création de la vue
@@ -52,30 +76,8 @@ class ProductAdapter(private val productList: List<Product>) : RecyclerView.Adap
      * @param position
      */
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        with(holder.binding) {
             val product = productList[position]
-
-            // Affectation des valeurs aux vues
-            binding.textProductName.text  = product.title
-            binding.textProductPrice.text = "${product.price}"
-
-            // Chargement de l'image
-            Glide.with(binding.imageProduct.context)
-                .load(product.image)
-                .into(binding.imageProduct)
-        }
-
-        holder.itemView.setOnClickListener {
-
-            // Création de l'Intent
-            val intent = Intent(holder.itemView.context, DetailProductActivity::class.java)
-
-            // Ajout du produit dans l'Intent
-            intent.putExtra("product", productList[position])
-
-            // Démarrage de l'activité
-            holder.itemView.context.startActivity(intent)
-        }
+            holder.bind(product)
     }
 
     /**

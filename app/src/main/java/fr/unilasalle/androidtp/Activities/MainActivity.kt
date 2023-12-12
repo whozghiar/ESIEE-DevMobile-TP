@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
+                        Log.d("onNothingSelected","txt")
                         initRecyclerView(productView, binding)
                     }
 
@@ -111,6 +112,7 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initRecyclerView(productView: ProductViewModel, binding : ActivityMainBinding) {
         productView.fetchData()
+        Log.d("initRecycler","fsf")
         productView.product.observe(this) {
             val adapter = ProductAdapter(it)
             binding.listeImage.adapter = adapter

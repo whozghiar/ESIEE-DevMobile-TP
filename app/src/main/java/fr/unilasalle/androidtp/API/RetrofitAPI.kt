@@ -15,7 +15,6 @@ object RetrofitAPI {
 
     fun getService():RetrofitService{
         val retrofitBuilder = Retrofit.Builder()
-
         val okHttp = OkHttpClient.Builder().build()
 
         retrofitBuilder.client(okHttp)
