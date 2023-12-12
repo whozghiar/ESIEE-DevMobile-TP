@@ -20,6 +20,7 @@ class PanierActivity : AppCompatActivity() {
         binding = ActivityPanierBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Bannière en haut de l'écran
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(binding.bannerContainer.id, BannerFragment())
