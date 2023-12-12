@@ -22,6 +22,17 @@ class PanierActivity : AppCompatActivity() {
         binding = ActivityPanierBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val listener = object : OnItemClickListener {
+            override fun onDeleteProductDelete(product: Product) {
+                val item = ShoppingCart.getCartItem(product)
+                ShoppingCart.removeItem(item)
+                updateCart(cartAdapter)
+                updateTotal(binding)
+            }
+        }
+
+        cartAdapter = CartAdapter(listener)
+
         // Bannière en haut de l'écran
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -29,29 +40,21 @@ class PanierActivity : AppCompatActivity() {
                 .commit()
         }
 
-        val listener = object : OnItemClickListener {
-            override fun onDeleteProductDelete(product: Product) {
-                val item = ShoppingCart.getCartItem(product)
-                ShoppingCart.removeItem(item)
-                cartAdapter.cartItems = ShoppingCart.getProducts()
-            }
-        }
-
-        cartAdapter = CartAdapter(listener)
-
         binding.cartProductsItems.adapter = cartAdapter
         binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
 
-        cartAdapter.cartItems =
-            ShoppingCart.getProducts() // Mise à jour des produits dans le panier
+        // Mise à jour du panier
+        updateCart(cartAdapter)
 
         // Mise à jour du total de produits et du prix total
         updateTotal(binding)
 
     }
 
+    fun updateCart(cartAdapter: CartAdapter) {
+        cartAdapter.cartItems = ShoppingCart.getProducts()
+    }
 
-    // Fonction mettre à jour le total de produits et le prix total
     /**
      * Met à jour le total de produits et le prix total
      * @see ShoppingCart.getCount
