@@ -8,8 +8,8 @@ import fr.unilasalle.androidtp.repositories.ProductRepository
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(private val productRepository: ProductRepository) : ViewModel() {
-    private val _product = MutableLiveData<Product>()
-    val product: LiveData<Product> = _product
+    private val _product = MutableLiveData<Product?>()
+    val product: MutableLiveData<Product?> = _product
 
     // Call this method with the product ID when the product detail is needed
     fun loadProductDetail(productId: Int) {

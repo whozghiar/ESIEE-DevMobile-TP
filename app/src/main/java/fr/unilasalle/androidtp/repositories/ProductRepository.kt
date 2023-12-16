@@ -61,7 +61,7 @@ class ProductRepository(
      * Fonction pour récupérer tous les produits depuis la BDD
      * @return List<Product>
      */
-    fun getAllProducts(): List<Product> {
+    suspend fun getAllProducts(): List<Product> {
         try{
             return productDao.getAllProducts()
         }
@@ -76,7 +76,7 @@ class ProductRepository(
      * @param productId
      * @return Product
      */
-    fun getProductById(productId: Int): Product? {
+    suspend fun getProductById(productId: Int): Product? {
         try{
             return productDao.getProductById(productId)
         }
@@ -90,7 +90,7 @@ class ProductRepository(
      * Fonction pour insérer un produit dans la BDD
      * @param product
      */
-    fun insertProduct(product: Product) {
+    suspend fun insertProduct(product: Product) {
         try{
             productDao.insertAll(product)
         }catch (e: Exception){
@@ -102,20 +102,20 @@ class ProductRepository(
      * Fonction pour insérer plusieurs produits dans la BDD
      * @param products
      */
-    fun insertAllProducts(products: List<Product>) {
+    suspend fun insertAllProducts(products: List<Product>) {
         try{
             productDao.insertAll(*products.toTypedArray())
         }catch (e: Exception) {
-            Log.e("ProductRepository", "Error while inserting products in database")
+            Log.e("ProductRepository", "${e.toString()} \nError while inserting products in database")
         }
     }
 
     /**
      * Fonction pour supprimer tous les produits de la BDD
      */
-    fun deleteAllProducts() {
+    suspend fun deleteAllProducts() {
         try{
-            productDao.deleteAllProducts()
+            productDao.deleteAll()
         }
         catch (e: Exception){
             Log.e("ProductRepository", "Error while deleting products from database")
@@ -123,7 +123,7 @@ class ProductRepository(
 
     }
 
-    fun deleteProductById(productId: Int) {
+    suspend fun deleteProductById(productId: Int) {
         try {
             productDao.deleteProductById(productId)
         }

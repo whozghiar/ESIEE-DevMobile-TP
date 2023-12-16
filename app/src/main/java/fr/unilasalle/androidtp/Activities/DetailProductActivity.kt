@@ -2,6 +2,7 @@ package fr.unilasalle.androidtp.Activities
 
 import fr.unilasalle.androidtp.fragments.BannerFragment
 import android.R
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -12,14 +13,22 @@ import android.text.style.StyleSpan
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.databinding.ActivityDetailProductBinding
+import fr.unilasalle.androidtp.viewmodels.ProductDetailViewModel
+import fr.unilasalle.androidtp.viewmodels.ProductListViewModel
 
 class DetailProductActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailProductBinding
+
+    private lateinit var productAdapter: ProductAdapter
+    private lateinit var productDetailViewModel: ProductDetailViewModel
+
 
     /**
      * Création de la vue
@@ -37,6 +46,7 @@ class DetailProductActivity : AppCompatActivity() {
                 .replace(binding.bannerContainer.id, BannerFragment())
                 .commit()
         }
+
 
         val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, (1..10).toList())
         binding.spinnerQuantity.adapter = adapter

@@ -10,16 +10,16 @@ import fr.unilasalle.androidtp.model.CartItem
 interface CartItemDao {
 
     @Query("SELECT * FROM cart_item")
-    fun getAllCartItems(): List<CartItem>
+    suspend fun getAllCartItems(): List<CartItem>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertCartItem(cartItem: CartItem)
+    suspend fun insertCartItem(cartItem: CartItem)
 
     @Query("DELETE FROM cart_item WHERE product_id = :productId")
-    fun deleteCartItem(productId: Int)
+    suspend fun deleteCartItem(productId: Int)
 
     @Query("SELECT quantity FROM cart_item WHERE product_id = :productId")
-    fun getQuantityByProductId(productId: Int): Int
+    suspend fun getQuantityByProductId(productId: Int): Int
 
 
 

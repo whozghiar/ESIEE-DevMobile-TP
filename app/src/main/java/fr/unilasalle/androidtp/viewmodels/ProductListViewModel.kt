@@ -23,8 +23,6 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
             try {
                 val productList = productRepository.fetchProducts()
                 _products.value = productList
-                // Insertion en BDD
-                productRepository.insertAllProducts(productList)
             } catch (e: Exception) {
                 Log.e("ProductListViewModel", "Error while loading products", e)
             }

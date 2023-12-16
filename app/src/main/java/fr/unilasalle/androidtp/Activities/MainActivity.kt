@@ -3,6 +3,7 @@ package fr.unilasalle.androidtp.Activities
 //import BannerFragment
 import android.R
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
 import fr.unilasalle.androidtp.fragments.BannerFragment
+import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.network.RetrofitAPI
 import fr.unilasalle.androidtp.network.RetrofitService
 import fr.unilasalle.androidtp.repositories.CategoryRepository
@@ -71,16 +73,16 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
-        // Mise en place du Spinner pour afficher les catégories de produits
         createSpinner(productViewModel, categoryViewModel, binding)
 
-        //initRecyclerView(productViewModelFactory, binding)
+        initRecyclerView(productViewModel, binding)
 
 
 
     }
 
-    // Fonction qui permet de créer un Spinner avec les catégories de produits
+
+
     /**
      * Création du Spinner pour afficher les catégories de produits
      * @param productView : ProductViewModel (ViewModel)
@@ -112,15 +114,11 @@ class MainActivity : AppCompatActivity() {
                         position: Int,
                         id: Long
                     ) {
-                        Log.d("MainActivity", "Catégorie sélectionnée : ${it[position]}")
-
-                        if (position == 0) initRecyclerView(productViewModel, binding)
-                        else initRecyclerView(productViewModel, binding)
+                        initRecyclerView(productViewModel, binding)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                         Log.d("onNothingSelected","txt")
-                        initRecyclerView(productViewModel, binding)
                     }
 
                 }
@@ -140,9 +138,23 @@ class MainActivity : AppCompatActivity() {
      */
     private fun initRecyclerView(productViewModel: ProductListViewModel, binding : ActivityMainBinding) {
 
+        binding.categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long){
+                Log.d("MainActivity", "Catégorie sélectionnée : ${parent?.getItemAtPosition(position)}")
+                if (position == 0) {
+                    productViewModel.loadProducts()
+                } else {
+                    productViewModel.loadProductsByCategory(parent?.getItemAtPosition(position).toString())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d("onNothingSelected","txt")
+                productViewModel.loadProducts()
+            }
+        }
 
 
-        productViewModel.loadProducts()
         productViewModel.products.observe(this@MainActivity) {
             productAdapter.dataProducts = it
         }

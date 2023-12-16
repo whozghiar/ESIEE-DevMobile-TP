@@ -18,7 +18,7 @@ class ShoppingCartRepository(
      *     Un objet CartItem contient un objet Product et une quantité
      *
      */
-    fun getAllCartItems(): List<CartItem> {
+    suspend fun getAllCartItems(): List<CartItem> {
         return cartItemDao.getAllCartItems()
     }
 
@@ -28,7 +28,7 @@ class ShoppingCartRepository(
      *    Produit à insérer dans le panier
      *    C'est un objet CartItem qui contient un objet Product et une quantité
      */
-    fun insertCartItem(cartItem: CartItem) {
+    suspend fun insertCartItem(cartItem: CartItem) {
         cartItemDao.insertCartItem(cartItem)
     }
 
@@ -38,7 +38,7 @@ class ShoppingCartRepository(
      *   ID du produit à supprimer du panier
      *   C'est un entier qui représente l'ID du produit à supprimer du panier
      */
-    fun deleteCartItem(productId: Int) {
+    suspend fun deleteCartItem(productId: Int) {
         cartItemDao.deleteCartItem(productId)
     }
 
@@ -48,7 +48,7 @@ class ShoppingCartRepository(
      * @return Int
      *    Quantité du produit dans le panier
      */
-    fun getCartItemQuantity(productId: Int): Int {
+    suspend fun getCartItemQuantity(productId: Int): Int {
         return cartItemDao.getQuantityByProductId(productId)
     }
 

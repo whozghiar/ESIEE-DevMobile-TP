@@ -32,19 +32,20 @@ class CategoryRepository (
     /**
      * Insertion en BDD
      */
-    fun insertAllCategories(categories: List<Category>) {
+    suspend fun insertAllCategories(categories: List<Category>) {
         try {
             categoryDao.insertAll(*categories.toTypedArray())
+            Log.d("CategoryRepository", "Categories inserted in database")
         }
         catch (e: Exception){
-            Log.e("CategoryRepository", "Error while inserting categories in database")
+            Log.e("CategoryRepository", "${e}\nError while inserting categories in database")
         }
     }
 
     /**
      * Récupère la liste des catégories depuis la BDD
      */
-    fun getAllCategories(): List<Category> {
+    suspend fun getAllCategories(): List<Category> {
         try{
             return categoryDao.getAllCategories()
         }
@@ -52,12 +53,6 @@ class CategoryRepository (
             Log.e("CategoryRepository", "Error while fetching categories from database")
         }
         return emptyList()
-    }
-
-    suspend fun fetchAndStoreCategories() {
-        val categories = fetchCategories()
-        val categoryEntities = categories.map { Category(id = 0, name = it) }
-        insertAllCategories(categoryEntities)
     }
 
 

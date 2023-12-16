@@ -11,21 +11,23 @@ import fr.unilasalle.androidtp.model.Product
 interface ProductDao {
 
     @Query("SELECT * FROM product")
-    fun getAllProducts(): List<Product>
+    suspend fun getAllProducts(): List<Product>
 
     @Query("SELECT * FROM product WHERE id = :productId")
-    fun getProductById(productId: Int): Product
+    suspend fun getProductById(productId: Int): Product
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(vararg products: Product)
+    suspend fun insertAll(vararg products: Product)
 
     @Delete
-    fun delete(product: Product)
+    suspend fun delete(product: Product)
+
+    @Delete
+    suspend fun deleteAll(vararg products: Product)
 
     @Query("DELETE FROM product WHERE id = :productId")
-    fun deleteProductById(productId: Int)
+    suspend fun deleteProductById(productId: Int)
 
-    @Query("DELETE FROM product")
-    fun deleteAllProducts()
+
 
 }

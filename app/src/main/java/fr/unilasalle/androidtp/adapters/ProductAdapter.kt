@@ -1,15 +1,19 @@
 package fr.unilasalle.androidtp.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import fr.unilasalle.androidtp.Activities.DetailProductActivity
 import fr.unilasalle.androidtp.R
 import fr.unilasalle.androidtp.databinding.ProductItemBinding
 import fr.unilasalle.androidtp.model.Product
 
-class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter() : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(
+) {
+
 
     /**
      * Data qui contient la liste des produits à afficher
@@ -37,6 +41,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
         val product = dataProducts[position]
         holder.bind(product)
     }
+
 
 
     /**
@@ -68,6 +73,19 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
             Glide.with(binding.imageProduct.context)
                 .load(item.image)
                 .into(binding.imageProduct)
+
+            binding.imageProduct.setOnClickListener {
+
+                    // Création de l'Intent
+                    val intent = Intent(binding.root.context, DetailProductActivity::class.java)
+
+                    // Ajout du produit dans l'Intent
+                    intent.putExtra("product", item)
+
+                    // Démarrage de l'activité
+                    binding.root.context.startActivity(intent)
+            }
+
         }
     }
 }
