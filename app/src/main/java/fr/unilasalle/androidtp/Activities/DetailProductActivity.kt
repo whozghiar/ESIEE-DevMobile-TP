@@ -2,32 +2,23 @@ package fr.unilasalle.androidtp.Activities
 
 import fr.unilasalle.androidtp.fragments.BannerFragment
 import android.R
-import android.content.Intent
-import android.graphics.Typeface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.StyleSpan
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Dao
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.database.daos.CartItemDao
 import fr.unilasalle.androidtp.database.daos.ProductDao
-import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.databinding.ActivityDetailProductBinding
 import fr.unilasalle.androidtp.network.RetrofitAPI
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import fr.unilasalle.androidtp.viewmodels.ProductDetailViewModel
-import fr.unilasalle.androidtp.viewmodels.ProductListViewModel
 import fr.unilasalle.androidtp.viewmodelsfactories.ProductDetailViewModelFactory
 
 class DetailProductActivity : AppCompatActivity() {
@@ -57,11 +48,13 @@ class DetailProductActivity : AppCompatActivity() {
 
         productDao = AppDatabase.getDatabase(this).getProductDao()
         productRepository = ProductRepository(api.getService(), productDao)
+
         cartItemDao = AppDatabase.getDatabase(this).getCartItemDao()
         cartItemRepository = ShoppingCartRepository(cartItemDao)
 
-        productDetailViewModelFactory = ProductDetailViewModelFactory(productRepository)
-        productDetailViewModel = ProductDetailViewModel(cartItemRepository)
+        productDetailViewModelFactory = ProductDetailViewModelFactory(cartItemRepository, productRepository)
+        productDetailViewModel = ViewModelProvider(this, productDetailViewModelFactory).get(
+            ProductDetailViewModel::class.java)
 
         // Bannière en haut de l'écran
         if (savedInstanceState == null) {
@@ -74,8 +67,8 @@ class DetailProductActivity : AppCompatActivity() {
         binding.spinnerQuantity.adapter = adapter
 
         intent.extras?.let {
-            product ->
-            val product = product.getSerializable("product", Product::class.java)
+            products ->
+            val product = products.getSerializable("product", Product::class.java)
 
             // Titre du produit
             binding.productTitle.append(product?.title)
@@ -97,8 +90,8 @@ class DetailProductActivity : AppCompatActivity() {
         // Bouton pour ajouter le produit au panier
         binding.buttonAddToCart.setOnClickListener {
             intent.extras?.let {
-                product ->
-                val product = product.getSerializable("product", Product::class.java)
+                products ->
+                val product = products.getSerializable("product", Product::class.java)
 
                 // Récupération de la quantité
                 val quantity = binding.spinnerQuantity.selectedItem.toString().toInt()

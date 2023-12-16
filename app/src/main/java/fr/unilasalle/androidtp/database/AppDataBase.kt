@@ -10,6 +10,7 @@ import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.model.Category
 import fr.unilasalle.androidtp.model.CartItem
+import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 
 @Database(entities = [Product::class, Category::class, CartItem::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {

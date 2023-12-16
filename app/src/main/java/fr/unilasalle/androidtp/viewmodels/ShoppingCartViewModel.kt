@@ -1,5 +1,6 @@
 package fr.unilasalle.androidtp.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,14 +13,6 @@ class ShoppingCartViewModel(private val shoppingCartRepository: ShoppingCartRepo
     private val _cartItems = MutableLiveData<List<CartItem>>()
     val cartItems: LiveData<List<CartItem>> = _cartItems
 
-    // LiveData for total price
-    private val _totalPrice = MutableLiveData<Double>()
-    val totalPrice: LiveData<Double> = _totalPrice
-
-    // LiveData for total count
-    private val _totalCount = MutableLiveData<Int>()
-    val totalCount: LiveData<Int> = _totalCount
-
     init {
         loadCartItems()
     }
@@ -27,22 +20,11 @@ class ShoppingCartViewModel(private val shoppingCartRepository: ShoppingCartRepo
     private fun loadCartItems() {
         viewModelScope.launch {
             try {
-                val items = shoppingCartRepository.getAllCartItems()
+                val items = shoppingCartRepository.getCartItems()
                 _cartItems.value = items
-                calculateTotalPrice(items)
-                calculateCountTotal(items)
             } catch (e: Exception) {
-                // Handle the exception
+                Log.e("ShoppingCartViewModel", "Error while getting cart items", e)
             }
         }
     }
-
-    private fun calculateTotalPrice(items: List<CartItem>) {
-    }
-
-    private fun calculateCountTotal(items: List<CartItem>) {
-    }
-
-
-    // Add methods to add items, remove items, and clear the cart as needed
 }

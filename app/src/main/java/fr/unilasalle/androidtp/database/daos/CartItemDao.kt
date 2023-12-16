@@ -11,7 +11,7 @@ import fr.unilasalle.androidtp.model.CartItem
 interface CartItemDao {
 
     @Query("SELECT * FROM cart_item")
-    suspend fun getAllCartItems(): List<CartItem>
+    suspend fun getCartItems(): List<CartItem>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(cartItem: CartItem)

@@ -8,7 +8,9 @@ import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.databinding.CartItemBinding
 
 
-class CartAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(
+    private val listener: OnItemClickListener
+) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     private lateinit var binding: CartItemBinding // Binding pour les cartItems (produits dans le panier)
 

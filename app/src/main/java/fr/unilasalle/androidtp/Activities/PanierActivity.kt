@@ -21,6 +21,7 @@ class PanierActivity : AppCompatActivity() {
         binding = ActivityPanierBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        /* @TODO : A décommenter pour afficher la gestion du clic sur le bouton supprimer
         val listener = object : OnItemClickListener {
             override fun onDeleteProductDelete(product: Product) {
                 /*
@@ -33,7 +34,9 @@ class PanierActivity : AppCompatActivity() {
             }
         }
 
-        cartAdapter = CartAdapter(listener)
+         */
+
+        //cartAdapter = CartAdapter(listener)
 
         // Bannière en haut de l'écran
         if (savedInstanceState == null) {
@@ -44,12 +47,6 @@ class PanierActivity : AppCompatActivity() {
 
         binding.cartProductsItems.adapter = cartAdapter
         binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
-
-        // Mise à jour du panier
-        updateCart(cartAdapter)
-
-        // Mise à jour du total de produits et du prix total
-        updateTotal(binding)
 
     }
 

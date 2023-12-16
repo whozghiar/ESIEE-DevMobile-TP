@@ -3,7 +3,6 @@ package fr.unilasalle.androidtp.Activities
 //import BannerFragment
 import android.R
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,9 +16,7 @@ import fr.unilasalle.androidtp.adapters.ProductAdapter
 import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
 import fr.unilasalle.androidtp.fragments.BannerFragment
-import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.network.RetrofitAPI
-import fr.unilasalle.androidtp.network.RetrofitService
 import fr.unilasalle.androidtp.repositories.CategoryRepository
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.viewmodels.CategoryViewModel
