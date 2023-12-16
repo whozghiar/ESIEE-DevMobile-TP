@@ -14,7 +14,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
     /**
      * Data qui contient la liste des produits à afficher
      */
-    var data: List<Product> = listOf()
+    var dataProducts: List<Product> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -23,7 +23,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
     /**
      *  Retourne le nombre d'éléments de la liste
      */
-    override fun getItemCount(): Int = data.size
+    override fun getItemCount(): Int = dataProducts.size
 
     /**
      * Création du ViewHolder pour les produits (éléments de la liste)
@@ -34,7 +34,7 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product = data[position]
+        val product = dataProducts[position]
         holder.bind(product)
     }
 

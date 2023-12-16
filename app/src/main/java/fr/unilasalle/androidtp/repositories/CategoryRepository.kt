@@ -1,6 +1,8 @@
 package fr.unilasalle.androidtp.repositories
 
+import android.util.Log
 import fr.unilasalle.androidtp.database.daos.CategoryDao
+import fr.unilasalle.androidtp.model.Category
 import fr.unilasalle.androidtp.network.RetrofitService
 
 class CategoryRepository (
@@ -15,18 +17,48 @@ class CategoryRepository (
      * Récupère la liste des catégories depuis l'API
      */
     suspend fun fetchCategories(): List<String> {
-        return apiService.getCategories()
+        try{
+            return apiService.getCategories()
+        }
+        catch (e: Exception){
+            Log.e("CategoryRepository", "Error while fetching categories from API")
+        }
+        return emptyList()
     }
+
 
     /* Partie BDD */
 
     /**
-     * Récupère la liste des catégories depuis la BDD
+     * Insertion en BDD
      */
-    fun getAllCategories(): List<String> {
-        return categoryDao.getAllCategories()
+    fun insertAllCategories(categories: List<Category>) {
+        try {
+            categoryDao.insertAll(*categories.toTypedArray())
+        }
+        catch (e: Exception){
+            Log.e("CategoryRepository", "Error while inserting categories in database")
+        }
     }
 
+    /**
+     * Récupère la liste des catégories depuis la BDD
+     */
+    fun getAllCategories(): List<Category> {
+        try{
+            return categoryDao.getAllCategories()
+        }
+        catch (e: Exception){
+            Log.e("CategoryRepository", "Error while fetching categories from database")
+        }
+        return emptyList()
+    }
+
+    suspend fun fetchAndStoreCategories() {
+        val categories = fetchCategories()
+        val categoryEntities = categories.map { Category(id = 0, name = it) }
+        insertAllCategories(categoryEntities)
+    }
 
 
 

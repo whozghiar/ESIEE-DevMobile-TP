@@ -1,6 +1,6 @@
 package fr.unilasalle.androidtp.Activities
 
-import BannerFragment
+import fr.unilasalle.androidtp.fragments.BannerFragment
 import android.R
 import android.graphics.Typeface
 import android.os.Build
@@ -15,7 +15,6 @@ import androidx.annotation.RequiresApi
 import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
-import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityDetailProductBinding
 
 class DetailProductActivity : AppCompatActivity() {
@@ -47,7 +46,8 @@ class DetailProductActivity : AppCompatActivity() {
         binding.buttonAddToCart.setOnClickListener {
             val productToAdd = intent.extras?.getSerializable("product", Product::class.java)
 
-            ShoppingCart.addItem(CartItem(productToAdd!!, binding.spinnerQuantity.selectedItem.toString().toInt()))
+            //ShoppingCart.addItem(CartItem(productToAdd!!, binding.spinnerQuantity.selectedItem.toString().toInt()))
+
             Toast.makeText(this, String.format("%d produit(s) ajouté(s) au panier",binding.spinnerQuantity.selectedItem.toString().toInt()), Toast.LENGTH_SHORT).show()
         }
 

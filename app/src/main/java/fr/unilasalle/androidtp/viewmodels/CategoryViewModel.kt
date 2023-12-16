@@ -19,8 +19,7 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository) : Vi
     private fun loadCategories() {
         viewModelScope.launch {
             try {
-                val categoryList = categoryRepository.fetchCategories()
-                _categories.value = categoryList
+                categoryRepository.fetchAndStoreCategories()
             } catch (e: Exception) {
                 // Handle the exception, e.g., by updating a LiveData that the UI can observe
             }

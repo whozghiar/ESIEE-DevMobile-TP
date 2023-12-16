@@ -19,7 +19,9 @@ import java.io.Serializable
 @Entity(tableName = "product")
 data class Product(
 
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int,
 
     @ColumnInfo(name = "title") val title: String,
 

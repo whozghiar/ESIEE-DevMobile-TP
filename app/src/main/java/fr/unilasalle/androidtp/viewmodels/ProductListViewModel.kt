@@ -18,11 +18,13 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
         loadProducts()
     }
 
-    private fun loadProducts() {
+    fun loadProducts() {
         viewModelScope.launch {
             try {
                 val productList = productRepository.fetchProducts()
                 _products.value = productList
+                // Insertion en BDD
+                productRepository.insertAllProducts(productList)
             } catch (e: Exception) {
                 Log.e("ProductListViewModel", "Error while loading products", e)
             }

@@ -1,6 +1,5 @@
 package fr.unilasalle.androidtp.Activities
 
-import BannerFragment
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,8 +7,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import fr.unilasalle.androidtp.adapters.CartAdapter
 import fr.unilasalle.androidtp.model.Product
-import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.ActivityPanierBinding
+import fr.unilasalle.androidtp.fragments.BannerFragment
 
 class PanierActivity : AppCompatActivity() {
 
@@ -24,10 +23,13 @@ class PanierActivity : AppCompatActivity() {
 
         val listener = object : OnItemClickListener {
             override fun onDeleteProductDelete(product: Product) {
+                /*
                 val item = ShoppingCart.getCartItem(product)
                 ShoppingCart.removeItem(item)
                 updateCart(cartAdapter)
                 updateTotal(binding)
+
+                 */
             }
         }
 
@@ -52,7 +54,7 @@ class PanierActivity : AppCompatActivity() {
     }
 
     fun updateCart(cartAdapter: CartAdapter) {
-        cartAdapter.cartItems = ShoppingCart.getProducts()
+        //cartAdapter.cartItems = ShoppingCart.getProducts()
     }
 
     /**
@@ -61,8 +63,11 @@ class PanierActivity : AppCompatActivity() {
      * @see ShoppingCart.getTotalPrice
      */
     fun updateTotal(binding: ActivityPanierBinding) {
+        /*
         binding.idQuantityProducts.text = ShoppingCart.getCount().toString()
         binding.tvTotalAmount.text = ShoppingCart.getTotalPrice().toString()
+
+         */
     }
 
 
@@ -71,3 +76,4 @@ class PanierActivity : AppCompatActivity() {
 interface OnItemClickListener {
     fun onDeleteProductDelete(product: Product)
 }
+

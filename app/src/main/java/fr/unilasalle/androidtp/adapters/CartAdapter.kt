@@ -1,14 +1,12 @@
 package fr.unilasalle.androidtp.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.Activities.OnItemClickListener
 import fr.unilasalle.androidtp.model.Product
-import fr.unilasalle.androidtp.beans.ShoppingCart
 import fr.unilasalle.androidtp.databinding.CartItemBinding
+
 
 class CartAdapter(private val listener: OnItemClickListener) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
@@ -33,6 +31,7 @@ class CartAdapter(private val listener: OnItemClickListener) : RecyclerView.Adap
          */
         fun bind(product: Product, listener: OnItemClickListener){
 
+            /*
             val productTitle = product.title
             val productQuantity = ShoppingCart.getQuantity(product)
             val productPrice = product.price
@@ -53,6 +52,8 @@ class CartAdapter(private val listener: OnItemClickListener) : RecyclerView.Adap
                 Log.d("CartAdapter", "Suppression du produit ${product.title}")
                 listener.onDeleteProductDelete(product)
             }
+
+             */
 
 
         }

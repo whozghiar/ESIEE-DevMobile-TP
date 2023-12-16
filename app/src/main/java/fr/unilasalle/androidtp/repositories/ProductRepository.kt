@@ -1,12 +1,14 @@
 package fr.unilasalle.androidtp.repositories
 
+import android.util.Log
 import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.Product
+import fr.unilasalle.androidtp.network.RetrofitAPI
 import fr.unilasalle.androidtp.network.RetrofitService
 
 class ProductRepository(
     private val apiService: RetrofitService,
-    private val productDao : ProductDao
+    private val productDao: ProductDao
 ) {
 
     /* Partie API */
@@ -16,7 +18,12 @@ class ProductRepository(
      * @return List<Product>
      */
     suspend fun fetchProducts(): List<Product> {
-        return apiService.getProducts()
+        try{
+            return apiService.getProducts()
+        }catch (e: Exception){
+            Log.e("ProductRepository", "Error while fetching products from API")
+        }
+        return emptyList()
     }
 
     /**
@@ -24,8 +31,13 @@ class ProductRepository(
      * @param productId
      * @return Product
      */
-    suspend fun fetchProductById(productId: Int): Product {
-        return apiService.getProductById(productId)
+    suspend fun fetchProductById(productId: Int): Product? {
+        try{
+            return apiService.getProductById(productId)
+        }catch (e: Exception){
+            Log.e("ProductRepository", "Error while fetching product from API")
+        }
+        return null!!
     }
 
     /**
@@ -34,7 +46,13 @@ class ProductRepository(
      * @return List<Product>
      */
     suspend fun fetchProductsByCategory(categoryName: String): List<Product> {
-        return apiService.getProductsByCategory(categoryName)
+        try{
+            return apiService.getProductsByCategory(categoryName)
+        }
+        catch (e: Exception){
+            Log.e("ProductRepository", "Error while fetching products from API")
+        }
+        return emptyList()
     }
 
     /* Partie BDD */
@@ -44,7 +62,13 @@ class ProductRepository(
      * @return List<Product>
      */
     fun getAllProducts(): List<Product> {
-        return productDao.getAllProducts()
+        try{
+            return productDao.getAllProducts()
+        }
+        catch (e: Exception){
+            Log.e("ProductRepository", "Error while fetching products from database")
+        }
+        return emptyList()
     }
 
     /**
@@ -52,8 +76,14 @@ class ProductRepository(
      * @param productId
      * @return Product
      */
-    fun getProductById(productId: Int): Product {
-        return productDao.getProductById(productId)
+    fun getProductById(productId: Int): Product? {
+        try{
+            return productDao.getProductById(productId)
+        }
+        catch (e: Exception){
+            Log.e("ProductRepository", "Error while fetching product from database")
+        }
+        return null!!
     }
 
     /**
@@ -61,7 +91,11 @@ class ProductRepository(
      * @param product
      */
     fun insertProduct(product: Product) {
-        productDao.insertAll(product)
+        try{
+            productDao.insertAll(product)
+        }catch (e: Exception){
+            Log.e("ProductRepository", "Error while inserting product in database")
+        }
     }
 
     /**
@@ -69,18 +103,33 @@ class ProductRepository(
      * @param products
      */
     fun insertAllProducts(products: List<Product>) {
-        productDao.insertAll(*products.toTypedArray())
+        try{
+            productDao.insertAll(*products.toTypedArray())
+        }catch (e: Exception) {
+            Log.e("ProductRepository", "Error while inserting products in database")
+        }
     }
 
     /**
      * Fonction pour supprimer tous les produits de la BDD
      */
     fun deleteAllProducts() {
-        productDao.deleteAllProducts()
+        try{
+            productDao.deleteAllProducts()
+        }
+        catch (e: Exception){
+            Log.e("ProductRepository", "Error while deleting products from database")
+        }
+
     }
 
     fun deleteProductById(productId: Int) {
-        productDao.deleteProductById(productId)
+        try {
+            productDao.deleteProductById(productId)
+        }
+        catch (e: Exception){
+            Log.e("ProductRepository", "Error while deleting product from database")
+        }
     }
 
 

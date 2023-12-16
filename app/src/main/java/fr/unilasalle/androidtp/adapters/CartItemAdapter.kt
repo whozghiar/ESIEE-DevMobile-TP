@@ -8,8 +8,9 @@ import fr.unilasalle.androidtp.databinding.CartItemBinding
 import fr.unilasalle.androidtp.databinding.ProductItemBinding
 import fr.unilasalle.androidtp.model.CartItem
 
+
 class CartItemAdapter (
-    private val onSuppressionListener : onSuppressionClickListener
+    //private val onSuppressionListener : onSuppressionClickListener
 ) : RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>() {
 
     var list: List<CartItem> = listOf()
@@ -41,3 +42,5 @@ class CartItemAdapter (
         }
     }
 }
+
+

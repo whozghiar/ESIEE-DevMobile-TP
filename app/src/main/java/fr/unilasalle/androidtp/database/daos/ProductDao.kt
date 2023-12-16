@@ -3,6 +3,7 @@ package fr.unilasalle.androidtp.database.daos
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import fr.unilasalle.androidtp.model.Product
 
@@ -15,7 +16,7 @@ interface ProductDao {
     @Query("SELECT * FROM product WHERE id = :productId")
     fun getProductById(productId: Int): Product
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg products: Product)
 
     @Delete
