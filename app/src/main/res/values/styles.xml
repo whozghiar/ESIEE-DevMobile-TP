@@ -16,5 +16,35 @@
         <!-- Autres attributs de style -->
     </style>
 
-
+    <!-- ProductDetail -->
+    <style name="titleProductStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="categoryProductStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="priceProductStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="descriptionProductStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="quantityProductStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:fontFamily">"sans-serif-condensed"</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

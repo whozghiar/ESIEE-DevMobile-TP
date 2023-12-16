@@ -26,9 +26,6 @@ class DetailProductActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailProductBinding
 
-    private lateinit var productAdapter: ProductAdapter
-    private lateinit var productDetailViewModel: ProductDetailViewModel
-
 
     /**
      * Création de la vue
@@ -47,17 +44,13 @@ class DetailProductActivity : AppCompatActivity() {
                 .commit()
         }
 
-
         val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, (1..10).toList())
         binding.spinnerQuantity.adapter = adapter
 
-
         // Bouton ajouter au panier
         binding.buttonAddToCart.setOnClickListener {
-            val productToAdd = intent.extras?.getSerializable("product", Product::class.java)
-
+            //val productToAdd = intent.extras?.getSerializable("product", Product::class.java)
             //ShoppingCart.addItem(CartItem(productToAdd!!, binding.spinnerQuantity.selectedItem.toString().toInt()))
-
             Toast.makeText(this, String.format("%d produit(s) ajouté(s) au panier",binding.spinnerQuantity.selectedItem.toString().toInt()), Toast.LENGTH_SHORT).show()
         }
 

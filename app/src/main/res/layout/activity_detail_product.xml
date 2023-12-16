@@ -40,25 +40,37 @@
 
             <TextView
                 android:id="@+id/productTitle"
+                style="@style/titleProductStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textSize="24sp"/>
+                android:text="@string/titleProduct"
+                android:textSize="24sp"
+                tools:text="@string/titleProduct" />
 
             <TextView
                 android:id="@+id/productCategory"
+                style="@style/quantityProductStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="@string/quantitiyProduct"
+                tools:text="@string/quantitiyProduct" />
 
             <TextView
                 android:id="@+id/productPrice"
+                style="@style/priceProductStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="@string/priceProduct"
+                tools:text="@string/priceProduct" />
 
             <TextView
                 android:id="@+id/productDescription"
+                style="@style/descriptionProductStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"  />
+                android:layout_height="wrap_content"
+                android:text="@string/descriptionProduct"
+                tools:text="@string/descriptionProduct" />
 
             <Spinner
                 android:id="@+id/spinnerQuantity"

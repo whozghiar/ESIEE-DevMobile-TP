@@ -9,4 +9,12 @@
     <string name="remove">retirer le produit</string>
     <string name="imagedescription">imageDescription</string>
     <string name="supp">-</string>
+
+
+    <!-- ProductDetail -->
+    <string name="titleProduct">Titre : </string>
+    <string name="categoryProduct">Catégorie : </string>
+    <string name="priceProduct">Prix : </string>
+    <string name="descriptionProduct">Description : </string>
+    <string name="quantitiyProduct">Quantité : </string>
 </resources>
