@@ -1,5 +1,8 @@
 package fr.unilasalle.androidtp.repositories
 
+import android.util.Log
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import fr.unilasalle.androidtp.database.daos.CartItemDao
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.network.RetrofitService
@@ -7,49 +10,38 @@ import fr.unilasalle.androidtp.network.RetrofitService
 class ShoppingCartRepository(
     private val cartItemDao: CartItemDao
 ) {
-
-    /* Partie BDD */
-
-    /**
-     * Retourne la liste de tous les produits dans le panier
-     * @return List<CartItem>
-     *     Liste de tous les produits dans le panier
-     *     Chaque élément de la liste est un objet CartItem
-     *     Un objet CartItem contient un objet Product et une quantité
-     *
-     */
-    suspend fun getAllCartItems(): List<CartItem> {
-        return cartItemDao.getAllCartItems()
-    }
-
-    /**
-     * Insère en BDD un produit dans le panier
-     * @param cartItem
-     *    Produit à insérer dans le panier
-     *    C'est un objet CartItem qui contient un objet Product et une quantité
-     */
     suspend fun insertCartItem(cartItem: CartItem) {
-        cartItemDao.insertCartItem(cartItem)
+        try{
+            cartItemDao.insert(cartItem)
+            Log.d("ShoppingCartRepository", "Inserted cart item")
+        }catch (e: Exception){
+            Log.e("ShoppingCartRepository", "Error while inserting cart item", e)
+        }
     }
-
-    /**
-     * Supprime en BDD un produit du panier
-     * @param productId
-     *   ID du produit à supprimer du panier
-     *   C'est un entier qui représente l'ID du produit à supprimer du panier
-     */
     suspend fun deleteCartItem(productId: Int) {
-        cartItemDao.deleteCartItem(productId)
-    }
+        try{
+            cartItemDao.deleteCartItem(productId)
+            Log.d("ShoppingCartRepository", "Deleted cart item")
+        }catch (e: Exception){
+            Log.e("ShoppingCartRepository", "Error while deleting cart item", e)
+        }
 
-    /**
-     * Retourne la quantité d'un produit dans le panier
-     * @param productId
-     * @return Int
-     *    Quantité du produit dans le panier
-     */
-    suspend fun getCartItemQuantity(productId: Int): Int {
-        return cartItemDao.getQuantityByProductId(productId)
+    }
+    suspend fun insertOrUpdateCartItem(cartItem: CartItem) {
+        try{
+            val existingItem = cartItemDao.getCartItemByProductId(cartItem.productId)
+            Log.d("ShoppingCartRepository", "Existing item: $existingItem")
+            if (existingItem != null) {
+                val updatedItem = existingItem.copy(quantity = existingItem.quantity + cartItem.quantity)
+                cartItemDao.update(updatedItem)
+                Log.d("ShoppingCartRepository", "Updated cart item")
+            } else {
+                cartItemDao.insert(cartItem)
+            }
+        }catch (e: Exception){
+            Log.e("ShoppingCartRepository", "Error while inserting or updating cart item", e)
+        }
+
     }
 
 

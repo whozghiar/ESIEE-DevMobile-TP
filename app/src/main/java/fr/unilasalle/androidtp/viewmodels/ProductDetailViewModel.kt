@@ -1,24 +1,23 @@
 package fr.unilasalle.androidtp.viewmodels
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.repositories.ProductRepository
+import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import kotlinx.coroutines.launch
 
-class ProductDetailViewModel(private val productRepository: ProductRepository) : ViewModel() {
-    private val _product = MutableLiveData<Product?>()
-    val product: MutableLiveData<Product?> = _product
-
-    // Call this method with the product ID when the product detail is needed
-    fun loadProductDetail(productId: Int) {
+class ProductDetailViewModel(private val shoppingCartRepository: ShoppingCartRepository) : ViewModel() {
+    fun addProductToCart(product: Product, quantity: Int) {
         viewModelScope.launch {
             try {
-                val productDetail = productRepository.fetchProductById(productId)
-                _product.value = productDetail
+                val cartItem = CartItem(productId = product.id, quantity = quantity)
+                shoppingCartRepository.insertOrUpdateCartItem(cartItem)
             } catch (e: Exception) {
-                // Handle the exception, e.g., by updating a LiveData that the UI can observe
+                Log.e("ProductDetailViewModel", "Error while adding product to cart", e)
             }
         }
     }

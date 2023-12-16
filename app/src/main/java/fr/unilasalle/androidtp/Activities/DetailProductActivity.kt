@@ -14,18 +14,36 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Dao
 import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.adapters.ProductAdapter
+import fr.unilasalle.androidtp.database.AppDatabase
+import fr.unilasalle.androidtp.database.daos.CartItemDao
+import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.databinding.ActivityDetailProductBinding
+import fr.unilasalle.androidtp.network.RetrofitAPI
+import fr.unilasalle.androidtp.repositories.ProductRepository
+import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import fr.unilasalle.androidtp.viewmodels.ProductDetailViewModel
 import fr.unilasalle.androidtp.viewmodels.ProductListViewModel
+import fr.unilasalle.androidtp.viewmodelsfactories.ProductDetailViewModelFactory
 
 class DetailProductActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDetailProductBinding
 
+    private lateinit var productDao: ProductDao
+    private lateinit var productRepository: ProductRepository
+    private lateinit var cartItemDao: CartItemDao
+    private lateinit var cartItemRepository: ShoppingCartRepository
+
+    private lateinit var productDetailViewModelFactory: ProductDetailViewModelFactory
+    private lateinit var productDetailViewModel: ProductDetailViewModel
+
+
+    private val api = RetrofitAPI
 
     /**
      * Création de la vue
@@ -37,6 +55,14 @@ class DetailProductActivity : AppCompatActivity() {
         binding = ActivityDetailProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        productDao = AppDatabase.getDatabase(this).getProductDao()
+        productRepository = ProductRepository(api.getService(), productDao)
+        cartItemDao = AppDatabase.getDatabase(this).getCartItemDao()
+        cartItemRepository = ShoppingCartRepository(cartItemDao)
+
+        productDetailViewModelFactory = ProductDetailViewModelFactory(productRepository)
+        productDetailViewModel = ProductDetailViewModel(cartItemRepository)
+
         // Bannière en haut de l'écran
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
@@ -47,49 +73,42 @@ class DetailProductActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, (1..10).toList())
         binding.spinnerQuantity.adapter = adapter
 
-        // Bouton ajouter au panier
-        binding.buttonAddToCart.setOnClickListener {
-            //val productToAdd = intent.extras?.getSerializable("product", Product::class.java)
-            //ShoppingCart.addItem(CartItem(productToAdd!!, binding.spinnerQuantity.selectedItem.toString().toInt()))
-            Toast.makeText(this, String.format("%d produit(s) ajouté(s) au panier",binding.spinnerQuantity.selectedItem.toString().toInt()), Toast.LENGTH_SHORT).show()
-        }
-
-
-        // Récupération des informations du produit transmises par l'activité précédente
         intent.extras?.let {
             product ->
             val product = product.getSerializable("product", Product::class.java)
 
             // Titre du produit
-            binding.productTitle.text = SpannableStringBuilder().apply {
-                append("Titre : ")
-                setSpan(StyleSpan(Typeface.BOLD), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                append(product?.title)
-            }
+            binding.productTitle.append(product?.title)
+
 
             // Description du produit
-            binding.productDescription.text = SpannableStringBuilder().apply {
-                append("Description : ")
-                setSpan(StyleSpan(Typeface.BOLD), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                append(product?.description)
-            }
+            binding.productDescription.append(product?.description)
 
             // Prix du produit
-            binding.productPrice.text = SpannableStringBuilder().apply {
-                append("Prix : ")
-                setSpan(StyleSpan(Typeface.BOLD), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                append(String.format("%.2f€", product?.price))
-            }
+            binding.productPrice.append(String.format("%.2f €", product?.price))
 
             // Catégorie du produit
-            binding.productCategory.text = SpannableStringBuilder().apply {
-                append("Catégorie : ")
-                setSpan(StyleSpan(Typeface.BOLD), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                append(product?.category)
-            }
+            binding.productCategory.append(product?.category)
 
             // Image du produit
             Glide.with(this).load(product?.image).into(binding.productImage)
+        }
+
+        // Bouton pour ajouter le produit au panier
+        binding.buttonAddToCart.setOnClickListener {
+            intent.extras?.let {
+                product ->
+                val product = product.getSerializable("product", Product::class.java)
+
+                // Récupération de la quantité
+                val quantity = binding.spinnerQuantity.selectedItem.toString().toInt()
+
+                // Ajout du produit au panier
+                productDetailViewModel.addProductToCart(product!!, quantity)
+
+                // Message de confirmation
+                Toast.makeText(this, "$quantity Produit ajouté au panier", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
