@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import fr.unilasalle.androidtp.Activities.MainActivity
+import fr.unilasalle.androidtp.Activities.PanierActivity
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
 import fr.unilasalle.androidtp.databinding.FragmentBannerBinding
 
@@ -28,7 +29,7 @@ class BannerFragment : Fragment() {
 
         // Logique pour le clic sur l'icône du panier (ouverture de Panier)
         binding.cartImageView.setOnClickListener {
-            //navigateToPanierActivity()
+            navigateToPanierActivity()
         }
 
         // Logique pour le clic sur le logo (retour à l'accueil)
@@ -49,7 +50,7 @@ class BannerFragment : Fragment() {
 
     // Méthode qui met à jour le badge du panier dès que
 
-    /*
+
     private fun navigateToPanierActivity() {
         // TODO Verif si la page est déjà ouverte ou desactiver bouton
         // Intent pour démarrer PanierActivity
@@ -57,7 +58,7 @@ class BannerFragment : Fragment() {
         startActivity(intent)
     }
 
-     */
+
 
     private fun navigateToMainActivity() {
         activity?.finish() // On ferme l'activité actuelle

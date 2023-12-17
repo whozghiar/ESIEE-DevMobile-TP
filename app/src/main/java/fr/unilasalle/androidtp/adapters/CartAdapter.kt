@@ -6,15 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.unilasalle.androidtp.Activities.OnItemClickListener
 import fr.unilasalle.androidtp.model.Product
 import fr.unilasalle.androidtp.databinding.CartItemBinding
+import fr.unilasalle.androidtp.model.CartItem
 
 
 class CartAdapter(
-    private val listener: OnItemClickListener
+    //private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     private lateinit var binding: CartItemBinding // Binding pour les cartItems (produits dans le panier)
 
-    var cartItems : List<Product> = listOf()
+    var cartItems : List<CartItem> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -31,8 +32,7 @@ class CartAdapter(
          * @see Product
          * @see CartItemBinding
          */
-        fun bind(product: Product, listener: OnItemClickListener){
-
+        fun bind(){//product: Product, listener: OnItemClickListener){
             /*
             val productTitle = product.title
             val productQuantity = ShoppingCart.getQuantity(product)
@@ -83,7 +83,7 @@ class CartAdapter(
      */
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val cart = cartItems[position]
-        holder.bind(cart,listener)
+        holder.bind()//,listener)
     }
 
     /**

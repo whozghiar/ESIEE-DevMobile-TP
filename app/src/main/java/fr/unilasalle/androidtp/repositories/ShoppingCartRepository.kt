@@ -5,6 +5,7 @@ import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.database.daos.CartItemDao
 import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.CartItem
+import fr.unilasalle.androidtp.model.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 
@@ -61,6 +62,17 @@ class ShoppingCartRepository(
             }
         }catch (e: Exception){
             Log.e("ShoppingCartRepository", "Error while inserting or updating cart item", e)
+        }
+    }
+
+    suspend fun getProductsInCart(): List<Product> {
+        try{
+            val cartItems = cartItemDao.getProductsInCart()
+            Log.d("ShoppingCartRepository", "Got products in cart")
+            return cartItems
+        }catch (e: Exception){
+            Log.e("ShoppingCartRepository", "Error while getting cart items", e)
+            return emptyList()
         }
     }
 
