@@ -1,6 +1,7 @@
 package fr.unilasalle.androidtp.database.daos
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -17,8 +18,11 @@ interface CartItemDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(cartItem: CartItem)
 
+    @Delete
+    suspend fun delete(cartItem: CartItem)
+
     @Query("DELETE FROM cart_item WHERE product_id = :productId")
-    suspend fun deleteCartItem(productId: Int)
+    suspend fun deleteCartItemByProductId(productId: Int)
 
     @Query("SELECT quantity FROM cart_item WHERE product_id = :productId")
     suspend fun getQuantityByProductId(productId: Int): Int

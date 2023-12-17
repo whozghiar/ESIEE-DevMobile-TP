@@ -1,13 +1,9 @@
 package fr.unilasalle.androidtp.repositories
 
 import android.util.Log
-import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.database.daos.CartItemDao
-import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.Product
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 
 class ShoppingCartRepository(
     private val cartItemDao: CartItemDao,
@@ -30,14 +26,22 @@ class ShoppingCartRepository(
             Log.e("ShoppingCartRepository", "Error while inserting cart item", e)
         }
     }
-    suspend fun deleteCartItem(productId: Int) {
+    suspend fun deleteCartItemByProductId(productId: Int) {
         try{
-            cartItemDao.deleteCartItem(productId)
+            cartItemDao.deleteCartItemByProductId(productId)
+            Log.d("ShoppingCartRepository", "Deleted cart item (using productId)")
+        }catch (e: Exception){
+            Log.e("ShoppingCartRepository", "Error while deleting cart item", e)
+        }
+    }
+
+    suspend fun delete(cartItem : CartItem){
+        try{
+            cartItemDao.delete(cartItem)
             Log.d("ShoppingCartRepository", "Deleted cart item")
         }catch (e: Exception){
             Log.e("ShoppingCartRepository", "Error while deleting cart item", e)
         }
-
     }
 
     suspend fun updateCartItem(cartItem: CartItem) {

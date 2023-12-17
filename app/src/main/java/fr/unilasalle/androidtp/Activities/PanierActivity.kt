@@ -4,27 +4,34 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import fr.unilasalle.androidtp.adapters.CartAdapter
 import fr.unilasalle.androidtp.adapters.CartItemAdapter
 import fr.unilasalle.androidtp.database.AppDatabase
-import fr.unilasalle.androidtp.model.Product
+import fr.unilasalle.androidtp.database.daos.CartItemDao
+import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.databinding.ActivityPanierBinding
 import fr.unilasalle.androidtp.fragments.BannerFragment
+import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.network.RetrofitAPI
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import fr.unilasalle.androidtp.viewmodels.ShoppingCartViewModel
 import fr.unilasalle.androidtp.viewmodelsfactories.ShoppingCartViewModelFactory
-import java.security.Provider
 
-class PanierActivity : AppCompatActivity() {
+class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
 
     private lateinit var binding: ActivityPanierBinding
-    private lateinit var cartAdapter: CartItemAdapter
+    private lateinit var cartItemAdapter: CartItemAdapter
     private lateinit var productRecyclerView: RecyclerView
+
+    private lateinit var cartItemDao: CartItemDao
+    private lateinit var productDao: ProductDao
+
+    private lateinit var shoppingCartRepository: ShoppingCartRepository
+    private lateinit var productRepository: ProductRepository
 
     private lateinit var shoppingCartViewModel: ShoppingCartViewModel
     private lateinit var shoppingCartViewModelFactory: ShoppingCartViewModelFactory
@@ -44,77 +51,54 @@ class PanierActivity : AppCompatActivity() {
                 .commit()
         }
 
-        val productDao = AppDatabase.getDatabase(this).getProductDao()
-        val productRepository = ProductRepository(api.getService(), productDao)
+        cartItemDao = AppDatabase.getDatabase(this).getCartItemDao()
+        productDao = AppDatabase.getDatabase(this).getProductDao()
 
-        val cartItemDao = AppDatabase.getDatabase(this).getCartItemDao()
-        val cartItemRepository = ShoppingCartRepository(cartItemDao)
+        shoppingCartRepository = ShoppingCartRepository(cartItemDao)
+        productRepository = ProductRepository(api.getService(), productDao)
 
-        // Initialisation du RecyclerView et de l'Adapter
-        productRecyclerView = binding.cartProductsItems
-        cartAdapter = CartItemAdapter()
-
-        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(cartItemRepository)
-        shoppingCartViewModel = ViewModelProvider(this, shoppingCartViewModelFactory).get(
+        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(shoppingCartRepository,productRepository)
+        shoppingCartViewModel = ViewModelProvider(this@PanierActivity, shoppingCartViewModelFactory).get(
             ShoppingCartViewModel::class.java)
 
-        shoppingCartViewModel.cartItems.observe(this) {
-            cartAdapter.list = it
-        }
-        shoppingCartViewModel.loadCartItems()
-        shoppingCartViewModel.products.observe(this) {
-            cartAdapter.products = it
-        }
+        cartItemAdapter = CartItemAdapter()
+        cartItemAdapter.listener = this@PanierActivity
 
-        binding.cartProductsItems.adapter = cartAdapter
-        binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
+        productRecyclerView = binding.cartProductsItems
+        productRecyclerView.adapter = cartItemAdapter
+        productRecyclerView.layoutManager = LinearLayoutManager(this@PanierActivity)
+
+        observeViewModel()
+
 
 
     }
 
+    fun observeViewModel() {
 
+        shoppingCartViewModel.cartItems.observe(this@PanierActivity, Observer{
+            cartItemAdapter.cartItems = it
+        })
 
+        shoppingCartViewModel.products.observe(this@PanierActivity, Observer { products ->
+            val productMap = products.associateBy { it.id }
+            cartItemAdapter.products = productMap
+        })
 
-        /* @TODO : A décommenter pour afficher la gestion du clic sur le bouton supprimer
-        val listener = object : OnItemClickListener {
-            override fun onDeleteProductDelete(product: Product) {
-                /*
-                val item = ShoppingCart.getCartItem(product)
-                ShoppingCart.removeItem(item)
-                updateCart(cartAdapter)
-                updateTotal(binding)
+        shoppingCartViewModel.totalPrice.observe(this@PanierActivity, Observer {
+            binding.idTotalAmount.text = "$it €"
+        })
 
-                 */
-            }
-        }
-
-         */
-
-        //cartAdapter = CartAdapter(listener)
-
-        //binding.cartProductsItems.adapter = cartAdapter
-        //binding.cartProductsItems.layoutManager = LinearLayoutManager(this@PanierActivity)
-
+        shoppingCartViewModel.totalQuantity.observe(this@PanierActivity, Observer {
+            binding.idQuantityProducts.text = "$it"
+        })
     }
 
-    fun updateCart(cartAdapter: CartAdapter) {
-        //cartAdapter.cartItems = ShoppingCart.getProducts()
+    override  fun onDecreaseQuantity(cartItem: CartItem) {
+        shoppingCartViewModel.updateCartItem(cartItem)
     }
 
-    /**
-     * Met à jour le total de produits et le prix total
-     * @see ShoppingCart.getCount
-     * @see ShoppingCart.getTotalPrice
-     */
-    fun updateTotal(binding: ActivityPanierBinding) {
-        /*
-        binding.idQuantityProducts.text = ShoppingCart.getCount().toString()
-        binding.tvTotalAmount.text = ShoppingCart.getTotalPrice().toString()
-
-         */
+    override  fun onRemoveItem(cartItem: CartItem) {
+        shoppingCartViewModel.deleteCartItem(cartItem)
     }
-
-interface OnItemClickListener {
-    fun onDeleteProductDelete(product: Product)
 }
-

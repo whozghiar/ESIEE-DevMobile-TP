@@ -17,4 +17,11 @@
     <string name="priceProduct">Prix : </string>
     <string name="descriptionProduct">Description : </string>
     <string name="quantitiyProduct">Quantité : </string>
+
+    <!-- Cart -->
+    <string name="totalQuantity">Quantité totale : </string>
+    <string name="totalAmount">Montant total : </string>
+    <string name="checkout">Payer</string>
+    <string name="amountHolder">0.00€</string>
+    <string name="quantityHolder">0</string>
 </resources>

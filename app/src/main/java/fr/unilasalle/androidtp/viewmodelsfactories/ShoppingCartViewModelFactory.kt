@@ -8,13 +8,14 @@ import fr.unilasalle.androidtp.viewmodels.ProductListViewModel
 import fr.unilasalle.androidtp.viewmodels.ShoppingCartViewModel
 
 class ShoppingCartViewModelFactory(
-    private val shoppingCartRepository: ShoppingCartRepository
+    private val shoppingCartRepository: ShoppingCartRepository,
+    private val productRepository: ProductRepository
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShoppingCartViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ShoppingCartViewModel(shoppingCartRepository) as T
+            return ShoppingCartViewModel(shoppingCartRepository,productRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
