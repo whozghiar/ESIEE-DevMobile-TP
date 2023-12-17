@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import fr.unilasalle.androidtp.Activities.BuyHistoryActivity
 import fr.unilasalle.androidtp.Activities.MainActivity
 import fr.unilasalle.androidtp.Activities.PanierActivity
 import fr.unilasalle.androidtp.databinding.ActivityMainBinding
@@ -36,16 +37,6 @@ class BannerFragment : Fragment() {
         binding.logoImageView.setOnClickListener {
             navigateToMainActivity()
         }
-
-        /* @TODO : A décommenter pour afficher le badge du panier
-        // S'il y a un objet dans le panier, on affiche le badge
-        if (ShoppingCart.cartItems.isNotEmpty()) {
-            binding.cartNotificationImageView.visibility = View.VISIBLE
-        } else {
-            binding.cartNotificationImageView.visibility = View.INVISIBLE
-        }
-
-         */
     }
 
     // Méthode qui met à jour le badge du panier dès que
@@ -53,15 +44,39 @@ class BannerFragment : Fragment() {
 
     private fun navigateToPanierActivity() {
         // TODO Verif si la page est déjà ouverte ou desactiver bouton
-        // Intent pour démarrer PanierActivity
-        val intent = Intent(activity, PanierActivity::class.java)
-        startActivity(intent)
+        if (activity is PanierActivity) {
+            return
+        }else{
+            // Intent pour démarrer PanierActivity
+            val intent = Intent(activity, PanierActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
 
 
     private fun navigateToMainActivity() {
-        activity?.finish() // On ferme l'activité actuelle
+        // Si on est dans l'activité MainActivity, on ne fait rien
+        if (activity is MainActivity) {
+            return
+        }else{
+            activity?.finish()
+        }
+    }
+
+    private fun navigateToBuyHistoryActivity() {
+        if (activity is MainActivity) {
+            val intent = Intent(activity, BuyHistoryActivity::class.java)
+            startActivity(intent)
+        }else if(activity is BuyHistoryActivity) {
+            return
+        }else{
+            activity?.finish()
+            val intent = Intent(activity, BuyHistoryActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
 

@@ -24,4 +24,18 @@
     <string name="checkout">Payer</string>
     <string name="amountHolder">0.00€</string>
     <string name="quantityHolder">0</string>
+
+    <!-- DialogPayment -->
+    <string name="textCreditCardNumber">N° Carte de crédit</string>
+    <string name="hintTextCreditCardNumber">4974 0232 2042 1232</string>
+    <string name="textCreditCardExpirationDate">Date d\'expiration :</string>
+    <string name="hintTextCreditCardExpirationDate">09/26</string>
+    <string name="textCreditCardCvv">CVV :</string>
+    <string name="hintTextCreditCardCvv">123</string>
+    <string name="textCreditCardHolder">Titulaire de la carte :</string>
+    <string name="hintTextCreditCardHolder">John Doe</string>
+    <string name="textCreditCardAmount">Montant à payer :</string>
+    <string name="textCreditCardPay">Procéder au paiement</string>
+
+    <!-- BuyHistory -->
 </resources>
