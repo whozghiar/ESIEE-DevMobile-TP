@@ -31,3 +31,12 @@ data class Order(
     @ColumnInfo(name = "date")
     val date: String
 ) : Serializable
+
+data class OrderWithCart(
+    @Embedded val order: Order,
+    @Relation(
+        parentColumn = "cartId",
+        entityColumn = "id"
+    )
+    val cart: Cart
+) : Serializable

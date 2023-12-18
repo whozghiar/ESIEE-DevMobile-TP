@@ -23,6 +23,9 @@
             android:name=".Activities.DetailProductActivity"
             android:exported="false" />
         <activity
+            android:name=".Activities.BuyHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activities.MainActivity"
             android:exported="true">
             <intent-filter>

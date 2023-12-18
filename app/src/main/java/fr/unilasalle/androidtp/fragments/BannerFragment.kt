@@ -37,10 +37,11 @@ class BannerFragment : Fragment() {
         binding.logoImageView.setOnClickListener {
             navigateToMainActivity()
         }
+
+        binding.accountImageView.setOnClickListener {
+            navigateToBuyHistoryActivity()
+        }
     }
-
-    // Méthode qui met à jour le badge du panier dès que
-
 
     private fun navigateToPanierActivity() {
         // TODO Verif si la page est déjà ouverte ou desactiver bouton
@@ -53,7 +54,6 @@ class BannerFragment : Fragment() {
         }
 
     }
-
 
 
     private fun navigateToMainActivity() {

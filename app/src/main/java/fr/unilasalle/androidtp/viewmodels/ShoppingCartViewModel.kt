@@ -131,7 +131,7 @@ class ShoppingCartViewModel(
                 val order = Order(
                     id = 0,
                     cartId = currentCart.id,
-                    date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+                    date = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.FRANCE).format(Date())
                 )
                 orderRepository.createOrder(order)
                 initializeCart()

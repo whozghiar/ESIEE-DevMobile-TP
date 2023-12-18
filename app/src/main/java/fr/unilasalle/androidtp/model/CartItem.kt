@@ -31,6 +31,7 @@ import java.io.Serializable
 )
 data class CartItem(
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     val id: Int = 0,
     @ColumnInfo(name = "cartId")
     val cartId: Int, // Clé étrangère pour référencer le Cart
