@@ -13,15 +13,12 @@ import fr.unilasalle.androidtp.model.Product
 
 @Dao
 interface CartItemDao {
-    @Transaction
     @Insert
     suspend fun insert(vararg cartItem: CartItem)
 
-    @Transaction
     @Update
     suspend fun update(cartItem: CartItem)
 
-    @Transaction
     @Delete
     suspend fun delete(vararg cartItem: CartItem)
 
@@ -34,6 +31,7 @@ interface CartItemDao {
     @Query ("SELECT * FROM cart_item WHERE productId = :productId")
     suspend fun findCartItemByProductId(productId: Int): CartItemWithProduct
 
+    @Transaction
     @Query("SELECT * FROM cart_item")
     suspend fun getAllCartItems(): List<CartItem>
 }

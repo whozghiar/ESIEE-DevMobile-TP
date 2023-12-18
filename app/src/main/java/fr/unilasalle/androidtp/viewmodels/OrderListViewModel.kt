@@ -27,17 +27,9 @@ class OrderListViewModel(
         loadOrdersWithCart()
     }
 
-    fun loadOrders() {
-        viewModelScope.launch {
-            try {
-                val orderList = orderRepository.findOrders()
-                _orders.value = orderList
-            } catch (e: Exception) {
-                Log.e("OrderListViewModel", "Error while loading orders", e)
-            }
-        }
-    }
-
+    /**
+     * Charge toutes les commandes
+     */
     fun loadOrdersWithCart() {
         viewModelScope.launch {
             try {

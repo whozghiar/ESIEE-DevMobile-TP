@@ -18,6 +18,9 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
         loadProducts()
     }
 
+    /**
+     * Charge tous les produits
+     */
     fun loadProducts() {
         viewModelScope.launch {
             try {
@@ -30,6 +33,10 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
         }
     }
 
+    /**
+     * Charge les produits d'une catégorie
+     * @param categoryName Nom de la catégorie
+     */
     fun loadProductsByCategory(categoryName: String) {
         viewModelScope.launch {
             try {
@@ -41,6 +48,10 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
         }
     }
 
+    /**
+     * Insérer tous les produits dans la base de données
+     * @param products Liste des produits à insérer
+     */
     fun insertAllProducts(products: List<Product>) {
         viewModelScope.launch {
             try {

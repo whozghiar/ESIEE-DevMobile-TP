@@ -8,6 +8,7 @@
 
     <!-- Couleurs du thème -->
     <color name="itemsOrange">#FF5400</color>
+    <color name="bannerOrange">#E58F33</color>
     <color name="itemsBlanc">#FFFFFF</color>
     <color name="background">#0A0A0A</color>
 

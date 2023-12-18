@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import fr.unilasalle.androidtp.model.Product
 
@@ -19,10 +20,10 @@ interface ProductDao {
 
     @Delete
     suspend fun delete(vararg product: Product)
-
+    @Transaction
     @Query("SELECT * FROM product WHERE id = :id")
     suspend fun getProductById(id: Int): Product
-
+    @Transaction
     @Query("SELECT * FROM product")
     suspend fun getAllProducts(): List<Product>
 

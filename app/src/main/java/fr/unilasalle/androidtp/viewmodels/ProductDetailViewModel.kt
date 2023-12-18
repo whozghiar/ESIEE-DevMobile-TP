@@ -14,6 +14,12 @@ import kotlinx.coroutines.launch
 class ProductDetailViewModel(
     private val shoppingCartRepository: ShoppingCartRepository,
     private val productRepository: ProductRepository) : ViewModel() {
+
+    /**
+     * Ajoute un produit au panier
+     * @param product Produit à ajouter
+     * @param quantity Quantité du produit à ajouter
+     */
     fun addProductToCart(product: Product, quantity: Int) {
         viewModelScope.launch {
             try {

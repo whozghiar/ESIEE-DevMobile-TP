@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var productListViewModel: ProductListViewModel
     private lateinit var productRecyclerView: RecyclerView
 
 

@@ -55,6 +55,10 @@ class ShoppingCartViewModel(
             }
         }
     }
+
+    /**
+     * Charge le panier actif avec ses produits
+     */
     fun loadCartWithCartItems() {
         viewModelScope.launch {
             val currentCart = shoppingCartRepository.findCartById(currentCartId!!)
@@ -68,6 +72,9 @@ class ShoppingCartViewModel(
         }
     }
 
+    /**
+     *  Charge les produits du panier actif
+     */
     fun loadCartItemWithProducts() {
         viewModelScope.launch {
             val items = shoppingCartRepository.findCartItemsByCartId(currentCartId!!)
@@ -109,6 +116,10 @@ class ShoppingCartViewModel(
         }
     }
 
+    /**
+     * Décrémente la quantité d'un produit dans le panier
+     * @param cartItem
+     */
     fun decreasedCartItemQuantity(cartItem: CartItem) {
         viewModelScope.launch {
             shoppingCartRepository.decreaseCartItemQuantity(cartItem)
@@ -116,6 +127,10 @@ class ShoppingCartViewModel(
         }
     }
 
+    /**
+     * Supprime un produit du panier
+     * @param cartItem
+     */
     fun deleteCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             shoppingCartRepository.deleteCartItem(cartItem)
@@ -123,6 +138,9 @@ class ShoppingCartViewModel(
         }
     }
 
+    /**
+     * Créé une commande à partir du panier actif
+     */
     fun createOrder() {
         viewModelScope.launch {
             val currentCart = shoppingCartRepository.findCartById(currentCartId!!)

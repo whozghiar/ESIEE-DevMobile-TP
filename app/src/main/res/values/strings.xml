@@ -10,6 +10,10 @@
     <string name="imagedescription">imageDescription</string>
     <string name="supp">-</string>
 
+    <!-- FragmentBanner -->
+    <string name="bannerLogoDescription">LogoRetour</string>
+    <string name="bannerCart">Panier</string>
+    <string name="bannerHistory">Historique</string>
 
     <!-- ProductDetail -->
     <string name="titleProduct">Titre : </string>
