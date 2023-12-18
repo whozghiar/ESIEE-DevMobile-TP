@@ -15,6 +15,8 @@ class CategoryRepository (
 
     /**
      * Récupère la liste des catégories depuis l'API
+     * @return List<String>
+     *     Liste des catégories
      */
     suspend fun fetchCategories(): List<String> {
         try{
@@ -31,6 +33,7 @@ class CategoryRepository (
 
     /**
      * Insertion en BDD
+     * @param categories : List<Category>
      */
     suspend fun insertAllCategories(categories: List<Category>) {
         try {
@@ -44,6 +47,7 @@ class CategoryRepository (
 
     /**
      * Récupère la liste des catégories depuis la BDD
+     * @return List<Category>
      */
     suspend fun findAllCategories(): List<Category> {
         try{

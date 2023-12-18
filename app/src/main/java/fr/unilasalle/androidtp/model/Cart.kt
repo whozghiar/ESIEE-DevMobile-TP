@@ -12,7 +12,7 @@ data class Cart(
     val id: Int = 0,
 
     @ColumnInfo(name = "price")
-    val price: Double = 0.0,
+    var price: Double = 0.0,
 
     @ColumnInfo(name = "quantity")
     val quantity: Int = 0,

@@ -23,6 +23,9 @@ class ShoppingCartViewModel(
     private val _totalPrice = MutableLiveData<Double>()
     val totalPrice: LiveData<Double> = _totalPrice
 
+    private val _totalQuantity = MutableLiveData<Int>()
+    val totalQuantity: LiveData<Int> = _totalQuantity
+
     private var currentCartId: Int? = null
 
     init {
@@ -47,27 +50,51 @@ class ShoppingCartViewModel(
             val items = shoppingCartRepository.findCartItemsByCartId(currentCartId!!)
             Log.d("ShoppingCartViewModel", "loadCartItemWithProducts: $items")
             _cartItemWithProducts.value = items
+            computeTotalQuantity()
+            computeTotalPrice()
         }
     }
-    fun addProductToCart(productId: Int, quantity: Int) {
+
+    /**
+     * Calcule le prix total du panier et le met à jour dans la BDD
+     */
+    fun computeTotalPrice() {
         viewModelScope.launch {
-            val cartId = currentCartId ?: shoppingCartRepository.findCartWithoutOrder().id
-            val cartItem = CartItem(id = 0, cartId = cartId, productId = productId, quantity = quantity)
-            shoppingCartRepository.addOrUpdateCartItem(cartItem)
+            val items = shoppingCartRepository.findCartItemsByCartId(currentCartId!!)
+            var totalPrice = 0.0
+            for (item in items) {
+                val product = productRepository.fetchProductById(item.product.id)
+                totalPrice += product!!.price * item.cartItem.quantity
+            }
+            _totalPrice.value = totalPrice
+            shoppingCartRepository.updateCartPrice(currentCartId!!, totalPrice)
+        }
+    }
+
+    /**
+     * Calcule la quantité totale du panier et la met à jour dans la BDD
+     */
+    fun computeTotalQuantity() {
+        viewModelScope.launch {
+            val items = shoppingCartRepository.findCartItemsByCartId(currentCartId!!)
+            var totalQuantity = 0
+            for (item in items) {
+                totalQuantity += item.cartItem.quantity
+            }
+            _totalQuantity.value = totalQuantity
+        }
+    }
+
+    fun decreasedCartItemQUantity(cartItem: CartItem) {
+        viewModelScope.launch {
+            shoppingCartRepository.decreaseCartItemQuantity(cartItem)
             loadCartItemWithProducts()
         }
     }
 
-    fun removeProductFromCart(cartItem: CartItem) {
+    fun deleteCartItem(cartItem: CartItem) {
         viewModelScope.launch {
             shoppingCartRepository.deleteCartItem(cartItem)
-            loadCartItemWithProducts()
-        }
-    }
-
-    fun removeAllProductsFromCart() {
-        viewModelScope.launch {
-            shoppingCartRepository.deleteAllCartItems()
             loadCartItemWithProducts()
         }
     }

@@ -3,15 +3,12 @@ package fr.unilasalle.androidtp.Activities
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.Toast
+import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import fr.unilasalle.androidtp.R
 import fr.unilasalle.androidtp.adapters.CartItemAdapter
 import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.database.daos.CartDao
@@ -27,7 +24,7 @@ import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import fr.unilasalle.androidtp.viewmodels.ShoppingCartViewModel
 import fr.unilasalle.androidtp.viewmodelsfactories.ShoppingCartViewModelFactory
 
-class PanierActivity : AppCompatActivity()/*, CartItemAdapter.CartItemListener */{
+class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
 
     private lateinit var bindingActivityPanier: ActivityPanierBinding
     private lateinit var bindingDialogPayment: DialogPaymentBinding
@@ -72,9 +69,15 @@ class PanierActivity : AppCompatActivity()/*, CartItemAdapter.CartItemListener *
 
         cartItemAdapter = CartItemAdapter()
         productRecyclerView = bindingActivityPanier.cartProductsItems
+        cartItemAdapter.listener = this@PanierActivity
 
+        // Initialisation du RecyclerView
         setupRecyclerView()
+
+        // Observers
         observeCartItems()
+        observeTotalPrice()
+        observeTotalQuantity()
 
         // @TODO : Gérer la liste
 
@@ -115,27 +118,40 @@ class PanierActivity : AppCompatActivity()/*, CartItemAdapter.CartItemListener *
 
     }
 
-    /*
-    fun observeViewModel() {
-
-        shoppingCartViewModel.cartItems.observe(this@PanierActivity, Observer{
-            cartItemAdapter.cartItems = it
-        })
-
-        shoppingCartViewModel.products.observe(this@PanierActivity, Observer { products ->
-            val productMap = products.associateBy { it.id }
-            cartItemAdapter.products = productMap
-        })
-
-        shoppingCartViewModel.totalPrice.observe(this@PanierActivity, Observer {
-            bindingActivityPanier.idTotalAmount.text = "$it €"
-        })
-
-        shoppingCartViewModel.totalQuantity.observe(this@PanierActivity, Observer {
-            bindingActivityPanier.idQuantityProducts.text = "$it"
+    private fun observeTotalPrice() {
+        shoppingCartViewModel.totalPrice.observe(this, Observer { totalPrice ->
+            bindingActivityPanier.idTotalAmount.text = "$totalPrice €"
         })
     }
 
+    private fun observeTotalQuantity() {
+        shoppingCartViewModel.totalQuantity.observe(this, Observer { totalQuantity ->
+            bindingActivityPanier.idQuantityProducts.text = "$totalQuantity"
+        })
+    }
+
+    /**
+     * Gestion du bouton de paiement
+     */
+    private fun setCheckoutButton() {
+        bindingActivityPanier.btnCheckout.setOnClickListener {
+            Log.d("PanierActivity", "Clic sur le bouton de paiement")
+            //onPayment()
+        }
+    }
+
+    override fun onDecreaseQuantity(cartItem: CartItem) {
+        Log.d("PanierActivity", "Clic sur le bouton de suppression d'un article")
+        shoppingCartViewModel.decreasedCartItemQUantity(cartItem)
+    }
+
+    override fun onRemove(cartItem: CartItem) {
+        shoppingCartViewModel.deleteCartItem(cartItem)
+    }
+
+
+
+    /*
     override  fun onDecreaseQuantity(cartItem: CartItem) {
         shoppingCartViewModel.updateCartItem(cartItem)
     }
@@ -159,7 +175,6 @@ class PanierActivity : AppCompatActivity()/*, CartItemAdapter.CartItemListener *
             .setTitle("Validation de l'achat")
 
         val alertDialog = dialogBuilder.show()
-
 
     }
 

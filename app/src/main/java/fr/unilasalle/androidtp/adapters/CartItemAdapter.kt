@@ -15,18 +15,7 @@ import fr.unilasalle.androidtp.model.Product
 class CartItemAdapter (
 ) : RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>() {
 
-    /*
-    var cartItems: List<CartItem> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-    var products : Map<Int, Product> = mapOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-    */
+
 
     var cartItems = listOf<CartItemWithProduct>()
         set(value) {
@@ -39,7 +28,7 @@ class CartItemAdapter (
     // Interface pour les callbacks du listener
     interface CartItemListener {
         fun onDecreaseQuantity(cartItem: CartItem)
-        fun onRemoveItem(cartItem: CartItem)
+        fun onRemove(cartItem: CartItem)
     }
 
 
@@ -71,19 +60,19 @@ class CartItemAdapter (
                 .load(item.product.image)
                 .into(binding.idMiniatureProduct)
 
-            /*
+
             binding.idSupprimer.setOnClickListener {
-                if(listener != null) {
-                    if(item.quantity > 1) {
-                        item.quantity--
-                        listener!!.onDecreaseQuantity(item)
-                    } else {
-                        listener!!.onRemoveItem(item)
-                    }
+                val itemToDecrease = cartItems[adapterPosition]
+                if(itemToDecrease.cartItem.quantity > 1) {
+                    Log.d("CartItemAdapter", "Decrease quantity because quantity > 1")
+                    listener?.onDecreaseQuantity(itemToDecrease.cartItem)
+                } else {
+                    Log.d("CartItemAdapter", "Remove item because quantity = 1")
+                    listener?.onRemove(itemToDecrease.cartItem)
                 }
             }
 
-             */
+
         }
     }
 }
