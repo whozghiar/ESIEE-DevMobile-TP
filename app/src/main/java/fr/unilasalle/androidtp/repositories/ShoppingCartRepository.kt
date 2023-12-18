@@ -12,37 +12,6 @@ class ShoppingCartRepository(
     private val cartDao: CartDao
 ) {
 
-
-
-    /* CART WITH CART ITEMS */
-
-    /**
-     * Récupère le panier avec ses articles
-     * @param cartId : Int
-     */
-    suspend fun getCartWithItems(cartId: Int): CartWithCartItems {
-        val cart = cartDao.findCartById(cartId)
-        val cartItemsWithProducts = findCartItemsByCartId(cartId)
-        val cartItems = cartItemsWithProducts.map { it.cartItem }
-        return CartWithCartItems(cart, cartItems)
-    }
-
-    /**
-     * Récupère tous les paniers avec leurs articles
-     * @return List<CartWithCartItems>
-     *     Liste des paniers avec leurs articles
-     */
-    suspend fun getAllCartsWithItems(): List<CartWithCartItems> {
-        val carts = cartDao.findAllCarts()
-        val cartItems = cartItemDao.getAllCartItems()
-        val cartWithCartItems = mutableListOf<CartWithCartItems>()
-        for (cart in carts) {
-            val cartItem = cartItems.filter { it.cartId == cart.id }
-            cartWithCartItems.add(CartWithCartItems(cart, cartItem))
-        }
-        return cartWithCartItems
-    }
-
     /* CART ITEM WITH PRODUCT */
     /**
      * Récupère tous les articles du panier par l'id du panier
@@ -111,6 +80,13 @@ class ShoppingCartRepository(
     }
 
     /**
+     * Récupère un panier par son id
+     */
+    suspend fun findCartById(cartId: Int): Cart {
+        return cartDao.findCartById(cartId)
+    }
+
+    /**
      * Crée un nouveau panier
      * @return Cart
      */
@@ -144,6 +120,15 @@ class ShoppingCartRepository(
      */
     suspend fun deleteAllCarts() {
         cartDao.delete(*cartDao.findAllCarts().toTypedArray())
+    }
+
+    /**
+     * Met à jour la quantité du panier
+     */
+    suspend fun updateCartQuantity(currentCartId: Int, totalQuantity: Int){
+        val cart = cartDao.findCartById(currentCartId)
+        cart.quantity = totalQuantity
+        cartDao.update(cart)
     }
 
 

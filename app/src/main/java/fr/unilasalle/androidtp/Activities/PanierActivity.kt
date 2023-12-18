@@ -4,7 +4,9 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,28 +81,7 @@ class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
         observeTotalPrice()
         observeTotalQuantity()
 
-        // @TODO : Gérer la liste
-
-        /*
-        cartItemAdapter.listener = this@PanierActivity
-         */
-
-        /*
-        productRecyclerView = bindingActivityPanier.cartProductsItems
-        productRecyclerView.adapter = cartItemAdapter
-        productRecyclerView.layoutManager = LinearLayoutManager(this@PanierActivity)
-
-         */
-
-        /*
-        observeViewModel()
-
-        bindingActivityPanier.btnCheckout.setOnClickListener {
-            onPayment()
-        }
-
-         */
-
+        setCheckoutButton()
 
     }
 
@@ -136,47 +117,35 @@ class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
     private fun setCheckoutButton() {
         bindingActivityPanier.btnCheckout.setOnClickListener {
             Log.d("PanierActivity", "Clic sur le bouton de paiement")
-            //onPayment()
+            showPaymentDialog()
         }
     }
 
     override fun onDecreaseQuantity(cartItem: CartItem) {
         Log.d("PanierActivity", "Clic sur le bouton de suppression d'un article")
-        shoppingCartViewModel.decreasedCartItemQUantity(cartItem)
+        shoppingCartViewModel.decreasedCartItemQuantity(cartItem)
     }
 
     override fun onRemove(cartItem: CartItem) {
         shoppingCartViewModel.deleteCartItem(cartItem)
     }
 
-
-
-    /*
-    override  fun onDecreaseQuantity(cartItem: CartItem) {
-        shoppingCartViewModel.updateCartItem(cartItem)
-    }
-
-    override  fun onRemoveItem(cartItem: CartItem) {
-        shoppingCartViewModel.deleteCartItem(cartItem)
-    }
-
-    fun onPayment() {
-        showPaymentDialog()
-    }
     fun showPaymentDialog() {
-        if (shoppingCartViewModel.cartItems.value.isNullOrEmpty()) {
-            Toast.makeText(this, "Il n'y a aucun produit dans votre panier.", Toast.LENGTH_SHORT).show()
-            return
-        }
-        bindingDialogPayment = DialogPaymentBinding.inflate(layoutInflater)
+        shoppingCartViewModel.loadCartWithCartItems()
+        shoppingCartViewModel.cartWithCartItems.observe(this, Observer { cartWithCartItems ->
+            if (cartWithCartItems.cartItems.isNullOrEmpty()) {
+                Toast.makeText(this, "Le panier est vide", Toast.LENGTH_LONG).show()
+            } else {
+                bindingDialogPayment = DialogPaymentBinding.inflate(layoutInflater)
 
-        val dialogBuilder = AlertDialog.Builder(this)
-            .setView(bindingDialogPayment.root)
-            .setTitle("Validation de l'achat")
+                val dialogBuilder = AlertDialog.Builder(this)
+                    .setView(bindingDialogPayment.root)
+                    .setTitle("Validation de l'achat")
 
-        val alertDialog = dialogBuilder.show()
-
+                val alertDialog = dialogBuilder.show()
+            }
+        })
     }
 
-     */
+
 }

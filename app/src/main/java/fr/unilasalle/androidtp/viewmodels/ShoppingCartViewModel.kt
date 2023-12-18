@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.unilasalle.androidtp.model.Cart
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.CartItemWithProduct
+import fr.unilasalle.androidtp.model.CartWithCartItems
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import kotlinx.coroutines.launch
@@ -20,13 +22,16 @@ class ShoppingCartViewModel(
     private val _cartItemWithProducts = MutableLiveData<List<CartItemWithProduct>>()
     val cartItemWithProducts: LiveData<List<CartItemWithProduct>> = _cartItemWithProducts
 
+    private val _cartWithCartItems = MutableLiveData<CartWithCartItems>()
+    val cartWithCartItems: LiveData<CartWithCartItems> = _cartWithCartItems
+
     private val _totalPrice = MutableLiveData<Double>()
     val totalPrice: LiveData<Double> = _totalPrice
 
     private val _totalQuantity = MutableLiveData<Int>()
     val totalQuantity: LiveData<Int> = _totalQuantity
 
-    private var currentCartId: Int? = null
+    var currentCartId: Int? = null
 
     init {
         initializeCart()
@@ -42,6 +47,18 @@ class ShoppingCartViewModel(
             } else {
                 Log.d("ShoppingCartViewModel", "Aucun panier actif trouvé")
             }
+        }
+    }
+    fun loadCartWithCartItems() {
+        viewModelScope.launch {
+            val currentCart = shoppingCartRepository.findCartById(currentCartId!!)
+            val cartItems = if (currentCart != null) {
+                shoppingCartRepository.findCartItemsByCartId(currentCart.id)
+            } else {
+                listOf()
+            }
+
+            _cartWithCartItems.value = CartWithCartItems(cart = currentCart, cartItems = cartItems)
         }
     }
 
@@ -82,10 +99,11 @@ class ShoppingCartViewModel(
                 totalQuantity += item.cartItem.quantity
             }
             _totalQuantity.value = totalQuantity
+            shoppingCartRepository.updateCartQuantity(currentCartId!!, totalQuantity)
         }
     }
 
-    fun decreasedCartItemQUantity(cartItem: CartItem) {
+    fun decreasedCartItemQuantity(cartItem: CartItem) {
         viewModelScope.launch {
             shoppingCartRepository.decreaseCartItemQuantity(cartItem)
             loadCartItemWithProducts()
@@ -98,4 +116,9 @@ class ShoppingCartViewModel(
             loadCartItemWithProducts()
         }
     }
+
+    suspend fun getCartActif(): Cart? {
+        return shoppingCartRepository.findCartById(currentCartId!!)
+    }
+
 }

@@ -1,10 +1,11 @@
 package fr.unilasalle.androidtp.model
 
 import androidx.room.ColumnInfo
+import androidx.room.DatabaseView
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
-import androidx.room.Index
+import androidx.room.Junction
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import java.io.Serializable
@@ -48,11 +49,13 @@ data class CartItemWithProduct(
     val product: Product
 )
 
+
 data class CartWithCartItems(
     @Embedded val cart: Cart,
     @Relation(
         parentColumn = "id",
-        entityColumn = "cartId"
+        entityColumn = "cartId",
+        entity = CartItem::class
     )
-    val cartItems: List<CartItem>
+    val cartItems: List<CartItemWithProduct>
 )

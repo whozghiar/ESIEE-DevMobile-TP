@@ -15,6 +15,6 @@ data class Cart(
     var price: Double = 0.0,
 
     @ColumnInfo(name = "quantity")
-    val quantity: Int = 0,
+    var quantity: Int = 0,
 ) : Serializable
 
