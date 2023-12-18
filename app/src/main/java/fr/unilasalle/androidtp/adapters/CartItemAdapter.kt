@@ -8,12 +8,14 @@ import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.R
 import fr.unilasalle.androidtp.databinding.CartItemBinding
 import fr.unilasalle.androidtp.model.CartItem
+import fr.unilasalle.androidtp.model.CartItemWithProduct
 import fr.unilasalle.androidtp.model.Product
 
 
 class CartItemAdapter (
 ) : RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>() {
 
+    /*
     var cartItems: List<CartItem> = listOf()
         set(value) {
             field = value
@@ -24,7 +26,13 @@ class CartItemAdapter (
             field = value
             notifyDataSetChanged()
         }
+    */
 
+    var cartItems = listOf<CartItemWithProduct>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
     // Variable pour le listener
     var listener: CartItemListener? = null
 
@@ -44,26 +52,26 @@ class CartItemAdapter (
 
     override fun onBindViewHolder(holder: CartItemViewHolder, position: Int) {
         val cartItem = cartItems[position]
-        val product = products[cartItem.productId]
-        holder.bind(cartItem, product)
+        val product = cartItem.product
+        holder.bind(cartItem)
     }
 
     inner class CartItemViewHolder(catItemView : View) : RecyclerView.ViewHolder(catItemView) {
 
         // Binding avec le layout cart_item.xml
         private val binding : CartItemBinding = CartItemBinding.bind(catItemView)
-        fun bind(item: CartItem, product: Product?) {
+        fun bind(item: CartItemWithProduct) {
+            val prix = item.product.price * item.cartItem.quantity
+            binding.idProductTitle.text = item.product.title
+            binding.idPriceProduct.text = "${String.format("%.2f", prix)} €"
+            binding.idQuantityProduct.text = item.cartItem.quantity.toString()
 
-            val prix = product?.price?.times(item.quantity)
-            Log.d("CartItemAdapter", "Prix : $prix")
-            binding.idProductTitle.text = "Produit : ${product?.title}"
-            binding.idPriceProduct.text = "Prix : ${String.format("%.2f", prix)} €"
-            binding.idQuantityProduct.text = "Quantité : ${item.quantity}"
 
             Glide.with(binding.root)
-                .load(product?.image)
+                .load(item.product.image)
                 .into(binding.idMiniatureProduct)
 
+            /*
             binding.idSupprimer.setOnClickListener {
                 if(listener != null) {
                     if(item.quantity > 1) {
@@ -74,6 +82,8 @@ class CartItemAdapter (
                     }
                 }
             }
+
+             */
         }
     }
 }

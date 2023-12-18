@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.unilasalle.androidtp.model.CartItem
-import fr.unilasalle.androidtp.model.Product
+import fr.unilasalle.androidtp.model.CartItemWithProduct
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import kotlinx.coroutines.launch
@@ -16,83 +16,59 @@ class ShoppingCartViewModel(
     private val productRepository: ProductRepository
 ) : ViewModel() {
 
-    private val _cartItems = MutableLiveData<List<CartItem>>()
-    val cartItems: LiveData<List<CartItem>> = _cartItems
 
-    private val _products = MutableLiveData<List<Product>>()
-    val products: LiveData<List<Product>> = _products
+    private val _cartItemWithProducts = MutableLiveData<List<CartItemWithProduct>>()
+    val cartItemWithProducts: LiveData<List<CartItemWithProduct>> = _cartItemWithProducts
 
     private val _totalPrice = MutableLiveData<Double>()
     val totalPrice: LiveData<Double> = _totalPrice
 
-    private val _totalQuantity = MutableLiveData<Int>()
-    val totalQuantity: LiveData<Int> = _totalQuantity
+    private var currentCartId: Int? = null
+
     init {
-        loadCartItems()
-        loadProducts()
+        initializeCart()
     }
 
-    fun loadCartItems() {
+    fun initializeCart() {
         viewModelScope.launch {
-            try {
-                val items = shoppingCartRepository.getCartItems()
-                _cartItems.value = items
-                updateTotalPriceAndQuantity(items)
-            } catch (e: Exception) {
-                Log.e("ShoppingCartViewModel", "Error while getting cart items", e)
+            val currentCart = shoppingCartRepository.findCartWithoutOrder()
+            currentCartId = currentCart?.id
+            if (currentCartId != null) {
+                Log.d("ShoppingCartViewModel", "Panier actif trouvé : $currentCartId")
+                loadCartItemWithProducts()
+            } else {
+                Log.d("ShoppingCartViewModel", "Aucun panier actif trouvé")
             }
         }
     }
 
-    fun deleteCartItem(cartItem : CartItem){
+    fun loadCartItemWithProducts() {
         viewModelScope.launch {
-            try {
-                shoppingCartRepository.delete(cartItem)
-                Log.d("ShoppingCartViewModel", "Deleted cart item")
-                loadCartItems() // Raffraichissement de la liste des objets du panier
-                loadProducts() // Raffraichissement de la liste des produits
-            } catch (e: Exception) {
-                Log.e("ShoppingCartViewModel", "Error while deleting cart item", e)
-            }
+            val items = shoppingCartRepository.findCartItemsByCartId(currentCartId!!)
+            Log.d("ShoppingCartViewModel", "loadCartItemWithProducts: $items")
+            _cartItemWithProducts.value = items
+        }
+    }
+    fun addProductToCart(productId: Int, quantity: Int) {
+        viewModelScope.launch {
+            val cartId = currentCartId ?: shoppingCartRepository.findCartWithoutOrder().id
+            val cartItem = CartItem(id = 0, cartId = cartId, productId = productId, quantity = quantity)
+            shoppingCartRepository.addOrUpdateCartItem(cartItem)
+            loadCartItemWithProducts()
         }
     }
 
-    fun updateCartItem(cartItem: CartItem) {
+    fun removeProductFromCart(cartItem: CartItem) {
         viewModelScope.launch {
-            try {
-                shoppingCartRepository.updateCartItem(cartItem)
-                Log.d("ShoppingCartViewModel", "Updated cart item")
-                loadCartItems() // Raffraichissement de la liste des objets du panier
-                loadProducts() // Raffraichissement de la liste des produits
-            } catch (e: Exception) {
-                Log.e("ShoppingCartViewModel", "Error while updating cart item", e)
-            }
+            shoppingCartRepository.deleteCartItem(cartItem)
+            loadCartItemWithProducts()
         }
     }
 
-    suspend fun updateTotalPriceAndQuantity(items: List<CartItem>) {
-        val total = items.sumOf { it.quantity * getProductPriceById(it.productId) }
-        _totalPrice.value = total
-        _totalQuantity.value = items.sumOf { it.quantity }
-    }
-
-    suspend fun getProductPriceById(productId: Int): Double {
-
-        val product = productRepository.getProductById(productId)
-
-        return product?.price ?: 0.0
-
-    }
-
-
-    fun loadProducts() {
+    fun removeAllProductsFromCart() {
         viewModelScope.launch {
-            try {
-                val items = shoppingCartRepository.getProductsInCart()
-                _products.value = items
-            } catch (e: Exception) {
-                Log.e("ShoppingCartViewModel", "Error while getting cart items", e)
-            }
+            shoppingCartRepository.deleteAllCartItems()
+            loadCartItemWithProducts()
         }
     }
 }

@@ -1,83 +1,84 @@
 package fr.unilasalle.androidtp.repositories
 
-import android.util.Log
+import fr.unilasalle.androidtp.database.daos.CartDao
 import fr.unilasalle.androidtp.database.daos.CartItemDao
 import fr.unilasalle.androidtp.model.CartItem
-import fr.unilasalle.androidtp.model.Product
+import fr.unilasalle.androidtp.model.Cart
+import fr.unilasalle.androidtp.model.CartItemWithProduct
+import fr.unilasalle.androidtp.model.CartWithCartItems
 
 class ShoppingCartRepository(
     private val cartItemDao: CartItemDao,
+    private val cartDao: CartDao
 ) {
-    suspend fun getCartItems(): List<CartItem> {
-        try{
-            val cartItems = cartItemDao.getCartItems()
-            Log.d("ShoppingCartRepository", "Got cart items")
-            return cartItems
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while getting cart items", e)
-            return emptyList()
-        }
+
+
+
+    /* CART WITH CART ITEMS */
+    suspend fun getCartWithItems(cartId: Int): CartWithCartItems {
+        val cart = cartDao.findCartById(cartId)
+        val cartItemsWithProducts = findCartItemsByCartId(cartId)
+        val cartItems = cartItemsWithProducts.map { it.cartItem }
+        return CartWithCartItems(cart, cartItems)
     }
-    suspend fun insertCartItem(cartItem: CartItem) {
-        try{
+    suspend fun getAllCartsWithItems(): List<CartWithCartItems> {
+        val carts = cartDao.findAllCarts()
+        val cartItems = cartItemDao.getAllCartItems()
+        val cartWithCartItems = mutableListOf<CartWithCartItems>()
+        for (cart in carts) {
+            val cartItem = cartItems.filter { it.cartId == cart.id }
+            cartWithCartItems.add(CartWithCartItems(cart, cartItem))
+        }
+        return cartWithCartItems
+    }
+
+    /* CART ITEM WITH PRODUCT */
+    suspend fun findCartItemsByCartId(cartId: Int): List<CartItemWithProduct> {
+        return cartItemDao.findCartItemsByCartId(cartId)
+    }
+
+    /* CART ITEM */
+    suspend fun addOrUpdateCartItem(cartItem: CartItem) {
+        val existingCartItem = cartItemDao.findCartItemByProductId(cartItem.productId)
+        if (existingCartItem != null) {
+            // Incrémente la quantité de l'article existant
+            val updatedQuantity = existingCartItem.cartItem.quantity + cartItem.quantity
+            existingCartItem.cartItem.quantity = updatedQuantity
+            cartItemDao.update(existingCartItem.cartItem)
+        } else {
             cartItemDao.insert(cartItem)
-            Log.d("ShoppingCartRepository", "Inserted cart item")
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while inserting cart item", e)
         }
     }
-    suspend fun deleteCartItemByProductId(productId: Int) {
-        try{
-            cartItemDao.deleteCartItemByProductId(productId)
-            Log.d("ShoppingCartRepository", "Deleted cart item (using productId)")
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while deleting cart item", e)
+    suspend fun deleteCartItem(cartItem: CartItem) {
+        cartItemDao.delete(cartItem)
+    }
+
+    suspend fun deleteAllCartItems() {
+        cartItemDao.delete(*cartItemDao.getAllCartItems().toTypedArray())
+    }
+
+    /* CART */
+
+    suspend fun findCartWithoutOrder(): Cart {
+        val cart = cartDao.findCartWithoutOrder()
+        if (cart == null) {
+            return createNewCart()
+        }else{
+            return cart
         }
     }
 
-    suspend fun delete(cartItem : CartItem){
-        try{
-            cartItemDao.delete(cartItem)
-            Log.d("ShoppingCartRepository", "Deleted cart item")
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while deleting cart item", e)
-        }
+    suspend fun createNewCart(): Cart {
+        val newCart = Cart()
+        cartDao.insert(newCart)
+        return newCart
+    }
+    suspend fun deleteCart(cart: Cart) {
+        cartDao.delete(cart)
     }
 
-    suspend fun updateCartItem(cartItem: CartItem) {
-        try{
-            cartItemDao.update(cartItem)
-            Log.d("ShoppingCartRepository", "Updated cart item")
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while updating cart item", e)
-        }
-
-    }
-    suspend fun insertOrUpdateCartItem(cartItem: CartItem) {
-        try{
-            val existingCartItem = cartItemDao.getCartItemByProductId(cartItem.productId)
-            if(existingCartItem != null){
-                existingCartItem.quantity += cartItem.quantity
-                cartItemDao.update(existingCartItem)
-                Log.d("ShoppingCartRepository", "Updated cart item")
-            }else{
-                cartItemDao.insert(cartItem)
-                Log.d("ShoppingCartRepository", "Inserted cart item")
-            }
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while inserting or updating cart item", e)
-        }
-    }
-
-    suspend fun getProductsInCart(): List<Product> {
-        try{
-            val cartItems = cartItemDao.getProductsInCart()
-            Log.d("ShoppingCartRepository", "Got products in cart")
-            return cartItems
-        }catch (e: Exception){
-            Log.e("ShoppingCartRepository", "Error while getting cart items", e)
-            return emptyList()
-        }
+    suspend fun deleteAllCarts() {
+        cartDao.delete(*cartDao.findAllCarts().toTypedArray())
     }
 
 

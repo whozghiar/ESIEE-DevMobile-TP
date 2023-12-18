@@ -23,6 +23,7 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
             try {
                 val productList = productRepository.fetchProducts()
                 _products.value = productList
+                insertAllProducts(productList)
             } catch (e: Exception) {
                 Log.e("ProductListViewModel", "Error while loading products", e)
             }
@@ -36,6 +37,16 @@ class ProductListViewModel(private val productRepository: ProductRepository) : V
                 _products.value = productList
             } catch (e: Exception) {
                 Log.e("ProductListViewModel", "Error while loading products by category", e)
+            }
+        }
+    }
+
+    fun insertAllProducts(products: List<Product>) {
+        viewModelScope.launch {
+            try {
+                productRepository.insertAllProducts(products)
+            } catch (e: Exception) {
+                Log.e("ProductListViewModel", "Error while inserting products in database", e)
             }
         }
     }

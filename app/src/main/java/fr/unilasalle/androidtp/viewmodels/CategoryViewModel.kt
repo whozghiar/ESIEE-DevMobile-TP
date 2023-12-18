@@ -10,7 +10,9 @@ import fr.unilasalle.androidtp.model.Category
 import fr.unilasalle.androidtp.repositories.CategoryRepository
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(private val categoryRepository: CategoryRepository) : ViewModel() {
+class CategoryViewModel(
+    private val categoryRepository: CategoryRepository
+) : ViewModel() {
     private val _categories = MutableLiveData<List<String>>()
     val categories: LiveData<List<String>> = _categories
 
@@ -25,7 +27,7 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository) : Vi
      * Récupère les catégories depuis l'API
      * Rempli la liste mutable _categories avec les catégories récupérées
      */
-    private fun loadCategories() {
+    fun loadCategories() {
         viewModelScope.launch {
             try {
                 _categories.value = categoryRepository.fetchCategories()
@@ -39,7 +41,7 @@ class CategoryViewModel(private val categoryRepository: CategoryRepository) : Vi
      * Stocke les catégories dans la BDD
      * @param categories : liste des catégories à stocker
      */
-    private fun storeCategories(categories: List<String>) {
+    fun storeCategories(categories: List<String>) {
         viewModelScope.launch {
             try {
                 categoryRepository.insertAllCategories(categories.map { Category(id = 0, name = it) })

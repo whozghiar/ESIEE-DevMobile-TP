@@ -1,18 +1,31 @@
 package fr.unilasalle.androidtp.model
 
-data class Order(
-    val orderId: Int,
-    val productList: List<Product>,
-    val totalPrice: Double,
-    val orderDate: String,
-    val customerName: String,
-    val shippingAddress: String,
-    val status: OrderStatus
-)
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.PrimaryKey
+import java.io.Serializable
+import java.sql.Date
 
-enum class OrderStatus {
-    PENDING,
-    SHIPPED,
-    DELIVERED,
-    CANCELLED
-}
+@Entity(
+    tableName = "order",
+    foreignKeys = [
+        ForeignKey(
+            entity = Cart::class,
+            parentColumns = ["id"],
+            childColumns = ["cartId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
+data class Order(
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    val id: Int = 0,
+
+    @ColumnInfo(name = "cartId")
+    val cartId: Int,
+
+    @ColumnInfo(name = "date")
+    val date: String
+) : Serializable

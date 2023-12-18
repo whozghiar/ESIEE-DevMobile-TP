@@ -5,12 +5,14 @@ import android.R
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import fr.unilasalle.androidtp.database.AppDatabase
+import fr.unilasalle.androidtp.database.daos.CartDao
 import fr.unilasalle.androidtp.database.daos.CartItemDao
 import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.Product
@@ -27,8 +29,11 @@ class DetailProductActivity : AppCompatActivity() {
 
     private lateinit var productDao: ProductDao
     private lateinit var productRepository: ProductRepository
+
     private lateinit var cartItemDao: CartItemDao
+    private lateinit var cartDao: CartDao
     private lateinit var cartItemRepository: ShoppingCartRepository
+
 
     private lateinit var productDetailViewModelFactory: ProductDetailViewModelFactory
     private lateinit var productDetailViewModel: ProductDetailViewModel
@@ -50,7 +55,8 @@ class DetailProductActivity : AppCompatActivity() {
         productRepository = ProductRepository(api.getService(), productDao)
 
         cartItemDao = AppDatabase.getDatabase(this).getCartItemDao()
-        cartItemRepository = ShoppingCartRepository(cartItemDao)
+        cartDao = AppDatabase.getDatabase(this).getCartDao()
+        cartItemRepository = ShoppingCartRepository(cartItemDao, cartDao)
 
         productDetailViewModelFactory = ProductDetailViewModelFactory(cartItemRepository, productRepository)
         productDetailViewModel = ViewModelProvider(this, productDetailViewModelFactory).get(
@@ -96,8 +102,16 @@ class DetailProductActivity : AppCompatActivity() {
                 // Récupération de la quantité
                 val quantity = binding.spinnerQuantity.selectedItem.toString().toInt()
 
+                // Si le produit n'est pas null, on l'ajoute au panier
+                if (product != null) {
+                    productDetailViewModel.addProductToCart(product, quantity)
+                }else{ // Sinon, on affiche un message d'erreur
+                    Log.e("DetailProductActivity", "Product is null")
+                }
+
                 // Ajout du produit au panier
-                productDetailViewModel.addProductToCart(product!!, quantity)
+                Log.d("DetailProductActivity", "Ajout de $quantity ${product?.title} au panier\n" +
+                        "Product: $product\n" )
 
                 // Message de confirmation
                 Toast.makeText(this, "$quantity Produit ajouté au panier", Toast.LENGTH_SHORT).show()

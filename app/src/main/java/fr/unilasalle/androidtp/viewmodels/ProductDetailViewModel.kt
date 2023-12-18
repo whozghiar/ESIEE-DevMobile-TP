@@ -11,14 +11,24 @@ import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import kotlinx.coroutines.launch
 
-class ProductDetailViewModel(private val shoppingCartRepository: ShoppingCartRepository, private val productRepository: ProductRepository) : ViewModel() {
+class ProductDetailViewModel(
+    private val shoppingCartRepository: ShoppingCartRepository,
+    private val productRepository: ProductRepository) : ViewModel() {
     fun addProductToCart(product: Product, quantity: Int) {
         viewModelScope.launch {
             try {
-                Log.d("ProductDetailViewModel", "Adding product to cart : $product")
-                productRepository.insertProduct(product)
-                val cartItem = CartItem(productId = product.id, quantity = quantity)
-                shoppingCartRepository.insertOrUpdateCartItem(cartItem)
+                val cart = shoppingCartRepository.findCartWithoutOrder()
+                Log.d("ProductDetailViewModel", "Cart found: $cart")
+                val cartItem = CartItem(
+                    id = 0,
+                    cartId = cart.id,
+                    productId = product.id,
+                    quantity = quantity
+                )
+                // Log pour afficher le contenu de la table product
+
+                shoppingCartRepository.addOrUpdateCartItem(cartItem)
+
             } catch (e: Exception) {
                 Log.e("ProductDetailViewModel", "Error while adding product to cart", e)
             }

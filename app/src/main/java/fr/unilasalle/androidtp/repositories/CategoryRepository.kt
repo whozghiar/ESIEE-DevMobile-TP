@@ -45,7 +45,7 @@ class CategoryRepository (
     /**
      * Récupère la liste des catégories depuis la BDD
      */
-    suspend fun getAllCategories(): List<Category> {
+    suspend fun findAllCategories(): List<Category> {
         try{
             return categoryDao.getAllCategories()
         }

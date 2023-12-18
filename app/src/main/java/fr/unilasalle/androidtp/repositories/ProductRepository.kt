@@ -3,7 +3,6 @@ package fr.unilasalle.androidtp.repositories
 import android.util.Log
 import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.model.Product
-import fr.unilasalle.androidtp.network.RetrofitAPI
 import fr.unilasalle.androidtp.network.RetrofitService
 
 class ProductRepository(
@@ -61,7 +60,7 @@ class ProductRepository(
      * Fonction pour récupérer tous les produits depuis la BDD
      * @return List<Product>
      */
-    suspend fun getAllProducts(): List<Product> {
+    suspend fun findAllProducts(): List<Product> {
         try{
             return productDao.getAllProducts()
         }
@@ -76,14 +75,8 @@ class ProductRepository(
      * @param productId
      * @return Product
      */
-    suspend fun getProductById(productId: Int): Product? {
-        try{
-            return productDao.getProductById(productId)
-        }
-        catch (e: Exception){
-            Log.e("ProductRepository", "Error while fetching product from database")
-        }
-        return null!!
+    suspend fun findProductById(productId: Int): Product {
+        return productDao.getProductById(productId)
     }
 
     /**
@@ -92,7 +85,7 @@ class ProductRepository(
      */
     suspend fun insertProduct(product: Product) {
         try{
-            productDao.insertAll(product)
+            productDao.insert(product)
         }catch (e: Exception){
             Log.e("ProductRepository", "Error while inserting product in database")
         }
@@ -104,7 +97,7 @@ class ProductRepository(
      */
     suspend fun insertAllProducts(products: List<Product>) {
         try{
-            productDao.insertAll(*products.toTypedArray())
+            productDao.insert(*products.toTypedArray())
         }catch (e: Exception) {
             Log.e("ProductRepository", "${e.toString()} \nError while inserting products in database")
         }
@@ -115,21 +108,12 @@ class ProductRepository(
      */
     suspend fun deleteAllProducts() {
         try{
-            productDao.deleteAll()
+            productDao.delete(*productDao.getAllProducts().toTypedArray())
         }
         catch (e: Exception){
             Log.e("ProductRepository", "Error while deleting products from database")
         }
 
-    }
-
-    suspend fun deleteProductById(productId: Int) {
-        try {
-            productDao.deleteProductById(productId)
-        }
-        catch (e: Exception){
-            Log.e("ProductRepository", "Error while deleting product from database")
-        }
     }
 
 
