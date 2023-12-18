@@ -1,5 +1,6 @@
 package fr.unilasalle.androidtp.repositories
 
+import android.util.Log
 import fr.unilasalle.androidtp.database.daos.CartDao
 import fr.unilasalle.androidtp.database.daos.CartItemDao
 import fr.unilasalle.androidtp.model.CartItem
@@ -9,7 +10,7 @@ import fr.unilasalle.androidtp.model.CartWithCartItems
 
 class ShoppingCartRepository(
     private val cartItemDao: CartItemDao,
-    private val cartDao: CartDao
+    private val cartDao: CartDao,
 ) {
 
     /* CART ITEM WITH PRODUCT */
@@ -32,10 +33,13 @@ class ShoppingCartRepository(
         val existingCartItem = cartItemDao.findCartItemByProductId(cartItem.productId)
         if (existingCartItem != null) {
             // Incrémente la quantité de l'article existant
+            Log.d("ShoppingCartRepository", "Article existant trouvé : $existingCartItem")
             val updatedQuantity = existingCartItem.cartItem.quantity + cartItem.quantity
             existingCartItem.cartItem.quantity = updatedQuantity
             cartItemDao.update(existingCartItem.cartItem)
         } else {
+            // Ajoute un nouvel article au panier
+            Log.d("ShoppingCartRepository", "Aucun article existant trouvé : $cartItem")
             cartItemDao.insert(cartItem)
         }
     }
@@ -103,8 +107,10 @@ class ShoppingCartRepository(
      */
     suspend fun updateCartPrice(cartId: Int, totalPrice: Double) {
         val cart = cartDao.findCartById(cartId)
-        cart.price = totalPrice
-        cartDao.update(cart)
+        if (cart != null){
+            cart.price = totalPrice
+            cartDao.update(cart)
+        }
     }
 
     /**
@@ -127,8 +133,10 @@ class ShoppingCartRepository(
      */
     suspend fun updateCartQuantity(currentCartId: Int, totalQuantity: Int){
         val cart = cartDao.findCartById(currentCartId)
-        cart.quantity = totalQuantity
-        cartDao.update(cart)
+        if (cart != null){
+            cart.quantity = totalQuantity
+            cartDao.update(cart)
+        }
     }
 
 

@@ -9,13 +9,19 @@ import fr.unilasalle.androidtp.model.Cart
 import fr.unilasalle.androidtp.model.CartItem
 import fr.unilasalle.androidtp.model.CartItemWithProduct
 import fr.unilasalle.androidtp.model.CartWithCartItems
+import fr.unilasalle.androidtp.model.Order
+import fr.unilasalle.androidtp.repositories.OrderRepository
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ShoppingCartViewModel(
     private val shoppingCartRepository: ShoppingCartRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val orderRepository: OrderRepository
 ) : ViewModel() {
 
 
@@ -42,7 +48,7 @@ class ShoppingCartViewModel(
             val currentCart = shoppingCartRepository.findCartWithoutOrder()
             currentCartId = currentCart?.id
             if (currentCartId != null) {
-                Log.d("ShoppingCartViewModel", "Panier actif trouvé : $currentCartId")
+                Log.d("ShoppingCartViewModel", "Panier actif trouvé, id : $currentCartId")
                 loadCartItemWithProducts()
             } else {
                 Log.d("ShoppingCartViewModel", "Aucun panier actif trouvé")
@@ -117,8 +123,20 @@ class ShoppingCartViewModel(
         }
     }
 
-    suspend fun getCartActif(): Cart? {
-        return shoppingCartRepository.findCartById(currentCartId!!)
+    fun createOrder() {
+        viewModelScope.launch {
+            val currentCart = shoppingCartRepository.findCartById(currentCartId!!)
+            if (currentCart != null) {
+                // Création d'un objet Order
+                val order = Order(
+                    id = 0,
+                    cartId = currentCart.id,
+                    date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+                )
+                orderRepository.createOrder(order)
+                initializeCart()
+            }
+        }
     }
 
 }

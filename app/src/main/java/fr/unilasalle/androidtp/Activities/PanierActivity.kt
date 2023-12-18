@@ -15,12 +15,15 @@ import fr.unilasalle.androidtp.adapters.CartItemAdapter
 import fr.unilasalle.androidtp.database.AppDatabase
 import fr.unilasalle.androidtp.database.daos.CartDao
 import fr.unilasalle.androidtp.database.daos.CartItemDao
+import fr.unilasalle.androidtp.database.daos.OrderDao
 import fr.unilasalle.androidtp.database.daos.ProductDao
 import fr.unilasalle.androidtp.databinding.ActivityPanierBinding
 import fr.unilasalle.androidtp.databinding.DialogPaymentBinding
 import fr.unilasalle.androidtp.fragments.BannerFragment
 import fr.unilasalle.androidtp.model.CartItem
+import fr.unilasalle.androidtp.model.Order
 import fr.unilasalle.androidtp.network.RetrofitAPI
+import fr.unilasalle.androidtp.repositories.OrderRepository
 import fr.unilasalle.androidtp.repositories.ProductRepository
 import fr.unilasalle.androidtp.repositories.ShoppingCartRepository
 import fr.unilasalle.androidtp.viewmodels.ShoppingCartViewModel
@@ -35,10 +38,12 @@ class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
 
     private lateinit var cartItemDao: CartItemDao
     private lateinit var productDao: ProductDao
+    private lateinit var orderDao: OrderDao
     private lateinit var cartDao : CartDao
 
     private lateinit var shoppingCartRepository: ShoppingCartRepository
     private lateinit var productRepository: ProductRepository
+    private lateinit var orderRepository: OrderRepository
 
     private lateinit var shoppingCartViewModel: ShoppingCartViewModel
     private lateinit var shoppingCartViewModelFactory: ShoppingCartViewModelFactory
@@ -58,22 +63,26 @@ class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
                 .commit()
         }
 
+        // Initialisation des DAO
         cartItemDao = AppDatabase.getDatabase(this).getCartItemDao()
         cartDao = AppDatabase.getDatabase(this).getCartDao()
         productDao = AppDatabase.getDatabase(this).getProductDao()
+        orderDao = AppDatabase.getDatabase(this).getOrderDao()
 
+        // Initialisation des repositories
         shoppingCartRepository = ShoppingCartRepository(cartItemDao,cartDao)
         productRepository = ProductRepository(api.getService(), productDao)
+        orderRepository = OrderRepository(orderDao,cartDao)
 
-        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(shoppingCartRepository,productRepository)
+        // Initialisation du ViewModel
+        shoppingCartViewModelFactory = ShoppingCartViewModelFactory(shoppingCartRepository,productRepository, orderRepository)
         shoppingCartViewModel = ViewModelProvider(this@PanierActivity, shoppingCartViewModelFactory).get(
             ShoppingCartViewModel::class.java)
 
+        // Initialisation de l'adapter et du RecyclerView
         cartItemAdapter = CartItemAdapter()
         productRecyclerView = bindingActivityPanier.cartProductsItems
         cartItemAdapter.listener = this@PanierActivity
-
-        // Initialisation du RecyclerView
         setupRecyclerView()
 
         // Observers
@@ -81,6 +90,7 @@ class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
         observeTotalPrice()
         observeTotalQuantity()
 
+        // Initialisation du bouton de paiement
         setCheckoutButton()
 
     }
@@ -143,9 +153,31 @@ class PanierActivity : AppCompatActivity(), CartItemAdapter.CartItemListener {
                     .setTitle("Validation de l'achat")
 
                 val alertDialog = dialogBuilder.show()
+
+                setBuyBtn()
             }
         })
     }
 
+    // Fonction pour initialiser le bouton de paiement
+    /**
+     * Gestion du bouton de paiement
+     */
+    private fun setBuyBtn() {
+        bindingDialogPayment.idBuyBtn.setOnClickListener {
+            Log.d("PanierActivity", "Clic sur le bouton de paiement")
 
+            // Si les champs sont vides, on affiche un message d'erreur
+            if (bindingDialogPayment.editTextCardNumber.text.isNullOrEmpty() || bindingDialogPayment.editTextExpirationDate.text.isNullOrEmpty() || bindingDialogPayment.editTextCvv.text.isNullOrEmpty() || bindingDialogPayment.editTextCardHolder.text.isNullOrEmpty()){
+                Log.d("PanierActivity", "Champs vides")
+                Toast.makeText(this, "Veuillez remplir tous les champs", Toast.LENGTH_LONG).show()
+            } else {
+                // Créer un order avec le panier actif
+                shoppingCartViewModel.createOrder()
+                Log.d("PanierActivity", "Paiement effectué")
+                Toast.makeText(this, "Paiement effectué", Toast.LENGTH_LONG).show()
+
+            }
+        }
+    }
 }

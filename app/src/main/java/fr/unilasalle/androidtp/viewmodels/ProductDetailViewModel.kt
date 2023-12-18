@@ -25,8 +25,6 @@ class ProductDetailViewModel(
                     productId = product.id,
                     quantity = quantity
                 )
-                // Log pour afficher le contenu de la table product
-
                 shoppingCartRepository.addOrUpdateCartItem(cartItem)
 
             } catch (e: Exception) {
