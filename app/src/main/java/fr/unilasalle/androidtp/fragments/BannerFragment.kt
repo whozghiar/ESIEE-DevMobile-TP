@@ -41,6 +41,8 @@ class BannerFragment : Fragment() {
         binding.accountImageView.setOnClickListener {
             navigateToBuyHistoryActivity()
         }
+
+        binding.searchEditText.isEnabled = false
     }
 
     private fun navigateToPanierActivity() {
